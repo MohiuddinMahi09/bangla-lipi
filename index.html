@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>বোধ — বাংলা এআই</title>
+<title>বোধ — বাংলাকে বোঝে, নির্ভুলভাবে</title>
 <style>
 :root{--green:#08a66a;--green2:#0fc07d;--deep:#075c48;--ink:#102a2e;
       --muted:#7b8b90;--line:#e6ede9;--mint:#e9fbf2}
@@ -52,30 +52,49 @@ body{font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;
   box-shadow:0 8px 18px rgba(8,166,106,.28)}
 
 /* ---------- প্যানেল ---------- */
-.panel{display:none;flex-direction:column;gap:14px;padding:24px;background:#fff;
+.panel{display:none;flex-direction:column;gap:14px;padding:22px;background:#fff;
   border:1px solid var(--line);border-radius:22px;
   box-shadow:0 18px 40px rgba(10,60,40,.05)}
 .panel.on{display:flex;animation:fade .28s ease}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}}
-.panel h2{font-size:17px;font-weight:800;color:var(--deep)}
-.panel .sub{font-size:13px;color:var(--muted);margin-top:-8px}
 
-textarea{flex:1;width:100%;min-height:clamp(260px,46vh,460px);padding:20px;
+/* ---------- শিরোনাম + ফাইল টুলস ---------- */
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;
+  gap:12px;flex-wrap:wrap}
+.panel-head .titles{min-width:0}
+.panel h2{font-size:17px;font-weight:800;color:var(--deep)}
+.panel .sub{font-size:13px;color:var(--muted);margin-top:2px}
+
+.file-tools{display:flex;gap:6px;flex:none}
+.icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);
+  background:#fbfdfc;display:grid;place-items:center;cursor:pointer;transition:.2s}
+.icon-btn:hover{background:#f2f9f5;border-color:#c8ecda;transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(8,166,106,.15)}
+.icon-btn svg{width:16px;height:16px;stroke:var(--green);fill:none;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- টুল-র‍্যাপ ---------- */
+.tool-wrap{position:relative;flex:1;display:flex;flex-direction:column;min-height:0}
+
+textarea{flex:1;width:100%;min-height:clamp(320px,54vh,560px);padding:22px;
   border:1px solid var(--line);border-radius:16px;background:#fbfdfc;
   font:16px/1.85 inherit;color:inherit;resize:vertical;outline:none;transition:.2s}
 textarea:focus{border-color:#9fe3c4;background:#fff;
   box-shadow:0 0 0 4px rgba(8,166,106,.08)}
+#p4 textarea{padding-bottom:66px}
 
-.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.btn{border:1px solid var(--line);background:#fff;padding:11px 20px;border-radius:12px;
-  font:600 14px inherit;color:#17424a;cursor:pointer;transition:.2s}
-.btn:hover{background:#f2f9f5;border-color:#c8ecda}
-.btn.primary{border:0;color:#fff;background:linear-gradient(135deg,var(--green),var(--green2));
-  box-shadow:0 8px 18px rgba(8,166,106,.25)}
-.btn.primary:hover{filter:brightness(1.06)}
+/* ---------- FAB ---------- */
+.fab{position:absolute;right:18px;bottom:18px;display:flex;align-items:center;
+  gap:8px;border:0;padding:12px 20px;border-radius:14px;cursor:pointer;
+  font:700 13.5px inherit;color:#fff;z-index:2;
+  background:linear-gradient(135deg,var(--green),var(--green2));
+  box-shadow:0 12px 26px rgba(8,166,106,.35);transition:.2s}
+.fab:hover{filter:brightness(1.07);transform:translateY(-1px)}
+.fab svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.2;
+  stroke-linecap:round;stroke-linejoin:round}
 
 /* ---------- মাইক ---------- */
-.micwrap{flex:1;min-height:clamp(200px,34vh,320px);display:grid;place-items:center;
+.micwrap{flex:1;min-height:clamp(260px,44vh,420px);display:grid;place-items:center;
   gap:16px;padding:24px;border-radius:16px;border:1px dashed #cfe6dc;
   background:linear-gradient(180deg,#f5fdf9,#fbfdfc)}
 .micbtn{width:76px;height:76px;border:0;border-radius:50%;cursor:pointer;display:grid;
@@ -95,7 +114,7 @@ textarea:focus{border-color:#9fe3c4;background:#fff;
 @keyframes wave{0%,100%{height:8px}50%{height:24px}}
 
 /* ---------- OCR ---------- */
-.drop{flex:1;min-height:clamp(200px,34vh,320px);display:grid;place-items:center;
+.drop{flex:1;min-height:clamp(260px,44vh,420px);display:grid;place-items:center;
   text-align:center;border:2px dashed #cfe6dc;border-radius:16px;background:#fbfdfc;
   cursor:pointer;transition:.2s;padding:24px}
 .drop:hover{background:#f4fdf9;border-color:#9fe3c4}
@@ -125,7 +144,6 @@ textarea:focus{border-color:#9fe3c4;background:#fff;
 .set-row{display:flex;align-items:center;justify-content:space-between;gap:10px;
   padding:8px 0;border-bottom:1px dashed #eef3f1;font-size:13.5px;font-weight:600}
 .set-row:last-child{border-bottom:0}
-.set-row small{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:1px}
 input[type=checkbox]{accent-color:var(--green);width:17px;height:17px;cursor:pointer;flex:none}
 select{width:130px;border:1px solid var(--line);border-radius:9px;padding:7px 9px;
   font:600 12.5px inherit;color:#17424a;background:#fff;outline:none}
@@ -134,8 +152,17 @@ input[type=range]{accent-color:var(--green);width:120px}
 @media(max-width:640px){
   .svc span{display:none}
   .svc{padding:12px 6px}
-  .panel{padding:18px}
+  .panel{padding:16px;gap:12px}
   .brand h1{font-size:17px}
+  .brand p{display:none}
+  .panel h2{font-size:15.5px}
+  .panel .sub{font-size:12px}
+  .icon-btn{width:32px;height:32px}
+  .icon-btn svg{width:14px;height:14px}
+  textarea{min-height:clamp(300px,50vh,500px);padding:16px;font-size:15px}
+  #p4 textarea{padding-bottom:62px}
+  .micwrap,.drop{min-height:clamp(240px,42vh,380px)}
+  .fab{padding:11px 16px;font-size:12.5px}
 }
 </style>
 </head>
@@ -149,6 +176,9 @@ input[type=range]{accent-color:var(--green);width:120px}
   <symbol id="i-ocr" viewBox="0 0 24 24"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M4 12h16"/></symbol>
   <symbol id="i-lotus" viewBox="0 0 24 24"><path d="M12 3c2 2.4 3 4.6 3 6.6 0 1.9-1.3 3.1-3 3.1s-3-1.2-3-3.1C9 7.6 10 5.4 12 3Z"/><path d="M4 12.5c2 3.2 4.8 4.8 8 4.8s6-1.6 8-4.8"/></symbol>
   <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></symbol>
 </defs></svg>
 
 <div class="app">
@@ -156,7 +186,7 @@ input[type=range]{accent-color:var(--green);width:120px}
   <header class="top">
     <div class="brand">
       <div class="logo"><svg><use href="#i-lotus"/></svg></div>
-      <div><h1>বোধ</h1><p>বাংলা এআই স্টুডিও</p></div>
+      <div><h1>বোধ</h1><p>বাংলাকে বোঝে, নির্ভুলভাবে</p></div>
     </div>
     <span class="spacer"></span>
     <div class="switch" id="enc">
@@ -176,52 +206,99 @@ input[type=range]{accent-color:var(--green);width:120px}
 
   <!-- ১. বানান -->
   <section class="panel on" id="p1">
-    <h2>বানান যাচাই</h2>
-    <p class="sub">বাংলা লেখার বানান স্বয়ংক্রিয়ভাবে যাচাই ও সংশোধন করুন।</p>
-    <textarea placeholder="এখানে বাংলা লিখুন বা পেস্ট করুন..."></textarea>
-    <div class="row"><button class="btn primary">বানান যাচাই করুন</button></div>
+    <div class="panel-head">
+      <div class="titles">
+        <h2>বানান যাচাই</h2>
+        <p class="sub">বাংলা লেখার বানান স্বয়ংক্রিয়ভাবে যাচাই ও সংশোধন করুন।</p>
+      </div>
+      <div class="file-tools">
+        <button class="icon-btn" data-action="upload" data-accept=".txt,.md,.text" title="আপলোড"><svg><use href="#i-upload"/></svg></button>
+        <button class="icon-btn" data-action="download" data-file="bodh-banan.txt" title="ডাউনলোড"><svg><use href="#i-download"/></svg></button>
+      </div>
+    </div>
+    <div class="tool-wrap">
+      <textarea placeholder="এখানে বাংলা লিখুন বা পেস্ট করুন অথবা আপলোড করুন..."></textarea>
+    </div>
   </section>
 
   <!-- ২. ব্যাকরণ -->
   <section class="panel" id="p2">
-    <h2>ব্যাকরণ পরীক্ষা</h2>
-    <p class="sub">বাক্য গঠন, ক্রিয়ারূপ ও বিরামচিহ্নের ভুল ধরিয়ে দিন।</p>
-    <textarea placeholder="এখানে বাক্য লিখুন..."></textarea>
-    <div class="row"><button class="btn primary">ব্যাকরণ পরীক্ষা করুন</button></div>
+    <div class="panel-head">
+      <div class="titles">
+        <h2>ব্যাকরণ পরীক্ষা</h2>
+        <p class="sub">ব্যাকরণিক ভুল পরীক্ষা করুন।</p>
+      </div>
+      <div class="file-tools">
+        <button class="icon-btn" data-action="upload" data-accept=".txt,.md,.text" title="আপলোড"><svg><use href="#i-upload"/></svg></button>
+        <button class="icon-btn" data-action="download" data-file="bodh-bakoron.txt" title="ডাউনলোড"><svg><use href="#i-download"/></svg></button>
+      </div>
+    </div>
+    <div class="tool-wrap">
+      <textarea placeholder="এখানে বাক্য লিখুন কপি করে এনে পেস্ট করুন অথবা আপলোড করুন।..."></textarea>
+    </div>
   </section>
 
   <!-- ৩. কথা থেকে লেখা -->
   <section class="panel" id="p3">
-    <h2>কথা থেকে লেখা</h2>
-    <p class="sub">মাইকে বলুন — বাংলা লেখায় রূপান্তর হবে।</p>
-    <div class="micwrap">
-      <button class="micbtn" id="mic"><svg><use href="#i-mic"/></svg></button>
-      <div class="wave"><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="panel-head">
+      <div class="titles">
+        <h2>কথা থেকে লেখা</h2>
+        <p class="sub">কথা বলুন — আপনার কথা লেখায় রূপান্তর হবে।</p>
+      </div>
+      <div class="file-tools">
+        <button class="icon-btn" data-action="upload" data-accept="audio/*" title="অডিও আপলোড"><svg><use href="#i-upload"/></svg></button>
+        <button class="icon-btn" data-action="download" data-file="bodh-transcript.txt" title="লেখা ডাউনলোড"><svg><use href="#i-download"/></svg></button>
+      </div>
     </div>
-    <div class="row"><button class="btn primary">রেকর্ডিং শুরু করুন</button></div>
+    <div class="tool-wrap">
+      <div class="micwrap">
+        <button class="micbtn" id="mic"><svg><use href="#i-mic"/></svg></button>
+        <div class="wave"><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+    </div>
   </section>
 
   <!-- ৪. লেখা থেকে কথা -->
   <section class="panel" id="p4">
-    <h2>লেখা থেকে কথা</h2>
-    <p class="sub">যেকোনো বাংলা লেখা স্বাভাবিক কণ্ঠে শুনুন।</p>
-    <textarea placeholder="যে লেখাটি শুনতে চান তা লিখুন..."></textarea>
-    <div class="row"><button class="btn primary">▶ শুনুন</button></div>
+    <div class="panel-head">
+      <div class="titles">
+        <h2>লেখা থেকে কথা</h2>
+        <p class="sub">যে-কোনো বাংলা লেখা স্বাভাবিক কণ্ঠে শুনুন।</p>
+      </div>
+      <div class="file-tools">
+        <button class="icon-btn" data-action="upload" data-accept=".txt,.md,.text" title="আপলোড"><svg><use href="#i-upload"/></svg></button>
+        <button class="icon-btn" data-action="download" data-file="bodh-text.txt" title="ডাউনলোড"><svg><use href="#i-download"/></svg></button>
+      </div>
+    </div>
+    <div class="tool-wrap">
+      <textarea placeholder="যে লেখাটি শুনতে চান তা লিখুন..."></textarea>
+      <button class="fab"><svg><use href="#i-play"/></svg> শুনুন</button>
+    </div>
   </section>
 
   <!-- ৫. ওসিআর -->
   <section class="panel" id="p5">
-    <h2>ওসিআর — ছবি থেকে লেখা</h2>
-    <p class="sub">ছবি বা স্ক্যান করা পৃষ্ঠা থেকে বাংলা লেখা বের করুন।</p>
-    <label class="drop">
-      <div>
-        <svg><use href="#i-ocr"/></svg>
-        <p><strong>ছবি টেনে ছাড়ুন</strong> অথবা ক্লিক করে বেছে নিন</p>
-        <p>JPG, PNG, PDF — সর্বোচ্চ ১০ এমবি</p>
+    <div class="panel-head">
+      <div class="titles">
+        <h2>ওসিআর — ছবি থেকে লেখা</h2>
+        <p class="sub">ছবি বা স্ক্যান করা পৃষ্ঠা থেকে বাংলা লেখা বের করুন।</p>
       </div>
-      <input type="file" hidden accept="image/*,.pdf">
-    </label>
-    <div class="row"><button class="btn primary">লেখা বের করুন</button></div>
+      <div class="file-tools">
+        <button class="icon-btn" data-action="upload" data-accept="image/*,.pdf" title="আপলোড"><svg><use href="#i-upload"/></svg></button>
+        <button class="icon-btn" data-action="download" data-file="bodh-ocr.txt" title="ডাউনলোড"><svg><use href="#i-download"/></svg></button>
+      </div>
+    </div>
+    <div class="tool-wrap">
+      <label class="drop">
+        <div>
+          <svg><use href="#i-ocr"/></svg>
+          <p><strong>ছবি টেনে ছাড়ুন</strong> অথবা ক্লিক করে বেছে নিন</p>
+          <p>JPG, PNG, PDF — সর্বোচ্চ ১০ এমবি</p>
+        </div>
+        <input type="file" hidden accept="image/*,.pdf">
+      </label>
+      <button class="fab">লেখা বের করুন</button>
+    </div>
   </section>
 
 </div>
@@ -238,11 +315,9 @@ input[type=range]{accent-color:var(--green);width:120px}
     <h4>সাধারণ</h4>
     <div class="set-row">ইন্টারফেসের ভাষা
       <select><option>বাংলা</option><option>English</option></select></div>
-    <div class="set-row">লেখার ধরন
-      <select><option>ইউনিকোড</option><option>আনসি</option></select></div>
   </div>
 
-  <div class="set-group">
+  <div class="set-group" data-svc="p1">
     <h4>বানান</h4>
     <div class="set-row"><span>স্বয়ংক্রিয় সংশোধন</span><input type="checkbox" checked></div>
     <div class="set-row"><span>শব্দ প্রস্তাবনা</span><input type="checkbox"></div>
@@ -250,15 +325,23 @@ input[type=range]{accent-color:var(--green);width:120px}
     <div class="set-row"><span>যুক্তবর্ণ যাচাই</span><input type="checkbox"></div>
   </div>
 
-  <div class="set-group">
-    <h4>ব্যাকরণ</h4>
-    <div class="set-row"><span>বাক্য গঠন</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>ক্রিয়ারূপ</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>সন্ধি ও সমাস</span><input type="checkbox"></div>
-    <div class="set-row"><span>বিরামচিহ্ন</span><input type="checkbox"></div>
+  <div class="set-group" data-svc="p2">
+    <h4>ব্যাকরণ — ত্রুটির ধরন</h4>
+    <div class="set-row"><span>কর্তা-ক্রিয়ার সম্পর্ক</span><input type="checkbox" checked></div>
+    <div class="set-row"><span>সাধু-চলিত মিশ্রণ</span><input type="checkbox" checked></div>
+    <div class="set-row"><span>যতিচিহ্ন</span><input type="checkbox" checked></div>
+    <div class="set-row"><span>বানান সঠিক নয়</span><input type="checkbox" checked></div>
+    <div class="set-row"><span>বিবিধ</span><input type="checkbox"></div>
+    <div class="set-row"><span>প্রত্যয়-বিভক্তি</span><input type="checkbox" checked></div>
+    <div class="set-row"><span>ফাঁকা হবে</span><input type="checkbox" checked></div>
+    <div class="set-row"><span>অতিরিক্ত ফাঁকা</span><input type="checkbox" checked></div>
+    <div class="set-row"><span>যথার্থ শব্দ বসেনি</span><input type="checkbox"></div>
+    <div class="set-row"><span>অব্যয়</span><input type="checkbox" checked></div>
+    <div class="set-row"><span>বাহুল্য</span><input type="checkbox" checked></div>
+    <div class="set-row"><span>কনটেক্সট ভুল</span><input type="checkbox" checked></div>
   </div>
 
-  <div class="set-group">
+  <div class="set-group" data-svc="p3">
     <h4>কথা → লেখা</h4>
     <div class="set-row">ভাষা
       <select><option>বাংলা</option><option>ইংরেজি</option><option>মিশ্র</option></select></div>
@@ -267,7 +350,7 @@ input[type=range]{accent-color:var(--green);width:120px}
     <div class="set-row"><span>সময়-স্ট্যাম্প</span><input type="checkbox"></div>
   </div>
 
-  <div class="set-group">
+  <div class="set-group" data-svc="p4">
     <h4>লেখা → কথা</h4>
     <div class="set-row">কণ্ঠ
       <select><option>নারী</option><option>পুরুষ</option></select></div>
@@ -276,7 +359,7 @@ input[type=range]{accent-color:var(--green);width:120px}
     <div class="set-row"><span>অডিও ডাউনলোড</span><input type="checkbox"></div>
   </div>
 
-  <div class="set-group">
+  <div class="set-group" data-svc="p5">
     <h4>ওসিআর</h4>
     <div class="set-row"><span>হাতে লেখা</span><input type="checkbox" checked></div>
     <div class="set-row"><span>টেবিল শনাক্ত</span><input type="checkbox" checked></div>
@@ -285,18 +368,25 @@ input[type=range]{accent-color:var(--green);width:120px}
 </aside>
 
 <script>
-  /* সার্ভিস বদল */
   var svcs = document.querySelectorAll('.svc');
+
+  function syncSettings() {
+    var active = document.querySelector('.svc.on').dataset.p;
+    document.querySelectorAll('.set-group[data-svc]').forEach(function (g) {
+      g.style.display = (g.dataset.svc === active) ? '' : 'none';
+    });
+  }
+
   svcs.forEach(function (s) {
     s.onclick = function () {
       svcs.forEach(function (x) { x.classList.remove('on'); });
       document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('on'); });
       s.classList.add('on');
       document.getElementById(s.dataset.p).classList.add('on');
+      syncSettings();
     };
   });
 
-  /* ইউনিকোড / আনসি */
   var enc = document.querySelectorAll('#enc button');
   enc.forEach(function (b) {
     b.onclick = function () {
@@ -305,7 +395,6 @@ input[type=range]{accent-color:var(--green);width:120px}
     };
   });
 
-  /* সেটিংস ড্রয়ার */
   var drawer = document.getElementById('drawer');
   var overlay = document.getElementById('overlay');
   function toggleSet(open) {
@@ -316,10 +405,48 @@ input[type=range]{accent-color:var(--green);width:120px}
   document.getElementById('closeSet').onclick = function () { toggleSet(false); };
   overlay.onclick = function () { toggleSet(false); };
 
-  /* মাইক */
   document.getElementById('mic').onclick = function () {
     this.classList.toggle('live');
   };
+
+  document.querySelectorAll('[data-action="upload"]').forEach(function (btn) {
+    btn.onclick = function () {
+      var panel = btn.closest('.panel');
+      var area = panel ? panel.querySelector('textarea') : null;
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.accept = btn.dataset.accept || '.txt,.md';
+      input.onchange = function () {
+        var file = input.files[0];
+        if (!file) return;
+        if (area) {
+          var reader = new FileReader();
+          reader.onload = function () { area.value = reader.result; };
+          reader.readAsText(file);
+        }
+      };
+      input.click();
+    };
+  });
+
+  document.querySelectorAll('[data-action="download"]').forEach(function (btn) {
+    btn.onclick = function () {
+      var panel = btn.closest('.panel');
+      var area = panel ? panel.querySelector('textarea') : null;
+      var text = area ? area.value : 'বোধ — ফলাফল এখানে দেখা যাবে।';
+      var name = btn.dataset.file || 'bodh-result.txt';
+      var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+    };
+  });
+
+  syncSettings();
 </script>
 </body>
 </html>
