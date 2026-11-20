@@ -4,449 +4,1173 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>বোধ — বাংলাকে বোঝে, নির্ভুলভাবে</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--green:#08a66a;--green2:#0fc07d;--deep:#075c48;--ink:#102a2e;
-      --muted:#7b8b90;--line:#e6ede9;--mint:#e9fbf2}
+:root{
+  --green:#08a66a;--green2:#0fc07d;--deep:#075c48;--ink:#102a2e;
+  --muted:#7b8b90;--line:#e6ede9;--mint:#e9fbf2;
+  --red:#ef4444;--gblue:#3b82f6;--orange:#f59e0b;--purple:#8b5cf6;
+  --card:#fff;--input:#fbfdfc;--hover:#f2f9f5;
+  --shadow:rgba(10,60,40,.05);--shadow2:rgba(10,60,40,.12)
+}
+[data-theme="dark"]{
+  --green:#10b981;--green2:#34d399;--deep:#d1fae5;--ink:#f8fafc;
+  --muted:#94a3b8;--line:#334155;--mint:#064e3b;
+  --red:#f87171;--gblue:#60a5fa;--orange:#fbbf24;--purple:#a78bfa;
+  --card:#1e293b;--input:#0f172a;--hover:#334155;
+  --shadow:rgba(0,0,0,.3);--shadow2:rgba(0,0,0,.4)
+}
 *{box-sizing:border-box;margin:0}
 body{font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;
   color:var(--ink);min-height:100vh;padding:20px 16px;
   background:radial-gradient(1100px 500px at 6% -10%,#e8fbf2,transparent 60%),
-             radial-gradient(800px 420px at 100% 0%,#eaf6ff,transparent 55%),#f6f8f7}
+             radial-gradient(800px 420px at 100% 0%,#eaf6ff,transparent 55%),#f6f8f7;
+  transition:background .3s,color .3s}
+[data-theme="dark"] body{
+  background:radial-gradient(1100px 500px at 6% -10%,#052e26,transparent 60%),
+             radial-gradient(800px 420px at 100% 0%,#0a1f2e,transparent 55%),#0f172a}
 .app{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
 
+/* ---------- লগইন ---------- */
+#authScreen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(1100px 500px at 6% -10%,#e8fbf2,transparent 60%),
+             radial-gradient(800px 420px at 100% 0%,#eaf6ff,transparent 55%),#f6f8f7}
+.login-box{background:#fff;padding:34px;border-radius:20px;box-shadow:0 20px 40px rgba(10,60,40,.08);width:100%;max-width:380px;text-align:center}
+.login-box .logo{margin:0 auto 18px;width:56px;height:56px;border-radius:16px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--green),var(--green2));box-shadow:0 10px 22px rgba(8,166,106,.3)}
+.login-box .logo svg{width:30px;height:30px;stroke:#fff;fill:none;stroke-width:1.8}
+.login-box h2{font-size:22px;margin-bottom:6px;color:var(--deep)}
+.login-box p{font-size:13px;color:var(--muted);margin-bottom:20px}
+.login-box input{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:10px;margin-bottom:12px;font:15px inherit;outline:none;background:#fff;color:var(--ink)}
+.login-box input:focus{border-color:#9fe3c4;box-shadow:0 0 0 3px rgba(8,166,106,.1)}
+.login-box button{width:100%;padding:11px;background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;border:none;border-radius:10px;font:700 15px inherit;cursor:pointer;box-shadow:0 8px 18px rgba(8,166,106,.3)}
+.login-box button:hover{filter:brightness(1.07)}
+
 /* ---------- হেডার ---------- */
-.top{display:flex;align-items:center;gap:12px}
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.top-links{display:flex;justify-content:flex-end;align-items:center;gap:2px;flex:0 0 100%;order:0}
+.top-links a{font-size:10px;color:var(--muted);text-decoration:none;padding:1px 6px;border-radius:5px;font-weight:500;white-space:nowrap}
+.top-links a:hover{color:var(--green);background:rgba(8,166,106,.08)}
 .brand{display:flex;align-items:center;gap:11px}
 .logo{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
-  background:linear-gradient(135deg,var(--green),var(--green2));
-  box-shadow:0 10px 22px rgba(8,166,106,.3)}
-.logo svg{width:23px;height:23px;stroke:#fff;fill:none;stroke-width:1.7;
-  stroke-linecap:round;stroke-linejoin:round}
+  background:linear-gradient(135deg,var(--green),var(--green2));box-shadow:0 10px 22px rgba(8,166,106,.3)}
+.logo svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .brand h1{font-size:20px;font-weight:800;letter-spacing:-.4px;color:var(--deep)}
 .brand p{font-size:11.5px;color:var(--muted)}
 .spacer{flex:1}
 
-.switch{display:flex;gap:4px;padding:4px;background:#fff;border:1px solid var(--line);
-  border-radius:999px;box-shadow:0 6px 16px rgba(10,60,40,.05)}
-.switch button{border:0;background:transparent;border-radius:999px;padding:7px 14px;
-  font:600 12px inherit;color:var(--muted);cursor:pointer;transition:.2s}
-.switch button.on{background:linear-gradient(135deg,var(--green),var(--green2));
-  color:#fff;box-shadow:0 6px 14px rgba(8,166,106,.3)}
+.switch{display:flex;gap:4px;padding:4px;background:var(--card);border:1px solid var(--line);border-radius:999px;box-shadow:0 6px 16px var(--shadow)}
+.switch button{border:0;background:transparent;border-radius:999px;padding:7px 14px;font:600 12px inherit;color:var(--muted);cursor:pointer;transition:.2s}
+.switch button.on{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;box-shadow:0 6px 14px rgba(8,166,106,.3)}
 
-.gear{width:40px;height:40px;border:1px solid var(--line);border-radius:13px;
-  background:#fff;display:grid;place-items:center;cursor:pointer;transition:.2s}
-.gear:hover{background:#f2f9f5;border-color:#c8ecda}
-.gear svg{width:19px;height:19px;stroke:var(--green);fill:none;stroke-width:1.9;
-  stroke-linecap:round;stroke-linejoin:round}
+.ic{border:1px solid var(--line);background:var(--card);width:40px;height:40px;border-radius:13px;
+  display:grid;place-items:center;cursor:pointer;transition:.2s;position:relative;flex:none}
+.ic:hover{background:var(--hover);border-color:#c8ecda}
+.ic svg{width:19px;height:19px;stroke:var(--green);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+.share-wrap{position:relative}
+.share-menu{position:absolute;top:46px;right:0;background:var(--card);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 10px 25px var(--shadow2);display:none;flex-direction:column;width:160px;z-index:50;overflow:hidden}
+.share-menu.on{display:flex}
+.share-menu a,.share-menu div{padding:10px 14px;font-size:13px;color:var(--ink);text-decoration:none;cursor:pointer;border-bottom:1px solid var(--line)}
+.share-menu a:last-child,.share-menu div:last-child{border-bottom:none}
+.share-menu a:hover,.share-menu div:hover{background:var(--hover)}
+
+.user-wrap{position:relative}
+.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;
+  display:grid;place-items:center;font-weight:700;cursor:pointer;border:2px solid transparent;transition:.2s}
+.avatar:hover{border-color:var(--green);transform:scale(1.05)}
+.user-menu{position:absolute;top:48px;right:0;width:260px;background:var(--card);border:1px solid var(--line);border-radius:14px;
+  box-shadow:0 10px 30px var(--shadow2);padding:16px;display:none;flex-direction:column;gap:12px;z-index:60}
+.user-menu.on{display:flex}
+.um-head{display:flex;align-items:center;gap:10px}
+.um-av{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;
+  display:grid;place-items:center;font-weight:700;font-size:18px;flex:none}
+.um-name{font-size:14px;font-weight:700}
+.um-email{font-size:11.5px;color:var(--muted)}
+.um-stats{display:flex;flex-direction:column;gap:6px;padding:10px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.um-row{display:flex;justify-content:space-between;font-size:12px}
+.um-row span:first-child{color:var(--muted)}
+.um-row span:last-child{font-weight:600}
+.um-logout{background:rgba(239,68,68,.1);color:var(--red);border:none;padding:9px;border-radius:8px;font:600 13px inherit;cursor:pointer}
+.um-logout:hover{background:rgba(239,68,68,.2)}
 
 /* ---------- সার্ভিস ---------- */
-.services{display:flex;gap:6px;padding:7px;background:#fff;border:1px solid var(--line);
-  border-radius:20px;overflow-x:auto;box-shadow:0 12px 30px rgba(10,60,40,.05)}
-.svc{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;border:0;
-  background:transparent;padding:11px 8px;border-radius:14px;font:600 13.5px inherit;
-  color:#546a70;cursor:pointer;white-space:nowrap;transition:.2s}
-.svc svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.9;
-  stroke-linecap:round;stroke-linejoin:round}
-.svc:hover{background:#f2f9f5;color:var(--deep)}
-.svc.on{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;
-  box-shadow:0 8px 18px rgba(8,166,106,.28)}
+.services{display:flex;gap:6px;padding:7px;background:var(--card);border:1px solid var(--line);
+  border-radius:20px;overflow-x:auto;box-shadow:0 12px 30px var(--shadow)}
+.svc{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;border:0;background:transparent;padding:11px 8px;
+  border-radius:14px;font:600 13.5px inherit;color:#546a70;cursor:pointer;white-space:nowrap;transition:.2s}
+[data-theme="dark"] .svc{color:#94a3b8}
+.svc svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.svc:hover{background:var(--hover);color:var(--deep)}
+.svc.on{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;box-shadow:0 8px 18px rgba(8,166,106,.28)}
+
+/* ---------- টুলবার ---------- */
+.toolbar{display:none;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 14px;background:var(--card);
+  border:1px solid var(--line);border-radius:16px;box-shadow:0 6px 16px var(--shadow)}
+.toolbar.on{display:flex}
+.tg{display:flex;align-items:center;gap:8px;padding-right:12px;border-right:1px solid var(--line)}
+.tg:last-child{border-right:none}
+.tg .lbl{font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap}
+.toggle{position:relative;display:inline-block;width:38px;height:21px}
+.toggle input{opacity:0;width:0;height:0}
+.toggle .sld{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;transition:.3s;border-radius:22px}
+.toggle .sld:before{content:"";position:absolute;height:15px;width:15px;left:3px;bottom:3px;background:#fff;transition:.3s;border-radius:50%}
+.toggle input:checked + .sld{background:linear-gradient(135deg,var(--green),var(--green2))}
+.toggle input:checked + .sld:before{transform:translateX(17px)}
+
+.mode-group{display:flex;background:var(--hover);border-radius:9px;padding:3px;gap:2px}
+.mode-btn{padding:5px 10px;border:none;background:transparent;color:var(--muted);font:600 12px inherit;cursor:pointer;border-radius:6px;transition:.2s;white-space:nowrap}
+.mode-btn.on{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;box-shadow:0 2px 6px rgba(8,166,106,.25)}
+
+.badges{display:flex;gap:6px}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:6px;font-size:11.5px;font-weight:600}
+.badge-red{background:rgba(239,68,68,.1);color:var(--red)}
+.badge-blue{background:rgba(59,130,246,.1);color:var(--gblue)}
+.dot{width:6px;height:6px;border-radius:50%}
+.dot-red{background:var(--red)}
+.dot-blue{background:var(--gblue)}
+
+.btn-outline{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);
+  padding:7px 11px;border-radius:9px;font:600 12px inherit;color:var(--ink);cursor:pointer;white-space:nowrap}
+.btn-outline:hover{background:var(--hover);border-color:#c8ecda}
+.btn-outline svg{width:14px;height:14px;stroke:var(--green);fill:none;stroke-width:2}
+.count-chip{background:rgba(8,166,106,.15);color:var(--green);padding:0 6px;border-radius:8px;font-size:11px;font-weight:700}
+
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.qw{display:flex;align-items:center;gap:8px}
+.qc{width:34px;height:34px;border-radius:50%;background:conic-gradient(from 180deg,#d946ef,#3b82f6,#06b6d4);
+  display:grid;place-items:center;position:relative}
+.qc:before{content:"";position:absolute;inset:3px;background:var(--card);border-radius:50%}
+.qn{position:relative;font-size:12.5px;font-weight:700}
+.qt{display:flex;flex-direction:column;line-height:1.2}
+.qt .qt1{font-size:11.5px;font-weight:700}
+.qt .qt2{font-size:10.5px;color:var(--muted)}
 
 /* ---------- প্যানেল ---------- */
-.panel{display:none;flex-direction:column;gap:14px;padding:22px;background:#fff;
-  border:1px solid var(--line);border-radius:22px;
-  box-shadow:0 18px 40px rgba(10,60,40,.05)}
-.panel.on{display:flex;animation:fade .28s ease}
+.panel{display:none;padding:16px;background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:0 18px 40px var(--shadow)}
+.panel.on{display:flex;flex-direction:column;gap:12px;animation:fade .28s ease}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}}
 
-/* ---------- শিরোনাম + ফাইল টুলস ---------- */
-.panel-head{display:flex;align-items:flex-start;justify-content:space-between;
-  gap:12px;flex-wrap:wrap}
-.panel-head .titles{min-width:0}
-.panel h2{font-size:17px;font-weight:800;color:var(--deep)}
-.panel .sub{font-size:13px;color:var(--muted);margin-top:2px}
+/* স্প্লিট ভিউ (বানান ও ব্যাকরণ) */
+.panel-split{display:flex;gap:16px;align-items:stretch;min-height:clamp(320px,54vh,560px)}
+.panel-split .sidebar{width:260px;flex:none;border:1px solid var(--line);border-radius:16px;background:var(--input);padding:14px;overflow-y:auto}
+.sidebar h3{font-size:14px;font-weight:800;color:var(--deep);margin-bottom:10px}
+.sidebar-cards{display:flex;flex-direction:column;gap:10px}
+.sug-card{border:1px solid var(--line);border-radius:11px;padding:11px;cursor:pointer;transition:.2s;background:var(--card)}
+.sug-card:hover{border-color:#9fe3c4;box-shadow:0 4px 12px rgba(8,166,106,.08)}
+.sug-type{font-size:11px;font-weight:700;color:var(--red);margin-bottom:6px}
+.sug-type.blue{color:var(--gblue)}
+.sug-type.orange{color:var(--orange)}
+.sug-row{display:grid;grid-template-columns:1fr 18px 1fr;column-gap:6px;align-items:center;font-size:13px;margin-top:6px}
+.sug-wrong{text-decoration:line-through;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sug-arrow{text-align:center;color:var(--muted)}
+.sug-correct{color:var(--green);font-weight:600;cursor:pointer;padding:2px 6px;border-radius:5px;justify-self:start}
+.sug-correct:hover{background:rgba(8,166,106,.1)}
+.sug-correct.multi{display:inline-block;margin:2px 4px 2px 0}
 
-.file-tools{display:flex;gap:6px;flex:none}
-.icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);
-  background:#fbfdfc;display:grid;place-items:center;cursor:pointer;transition:.2s}
-.icon-btn:hover{background:#f2f9f5;border-color:#c8ecda;transform:translateY(-1px);
-  box-shadow:0 6px 16px rgba(8,166,106,.15)}
-.icon-btn svg{width:16px;height:16px;stroke:var(--green);fill:none;stroke-width:2;
-  stroke-linecap:round;stroke-linejoin:round}
+/* এডিটর এরিয়া */
+.editor-wrap{flex:1;min-width:0;position:relative;display:flex;flex-direction:column}
+.editor{flex:1;min-height:clamp(320px,54vh,560px);padding:20px;border:1px solid var(--line);border-radius:16px;
+  background:var(--input);font:16px/1.85 inherit;outline:none;overflow-y:auto;transition:.2s;color:var(--ink)}
+.editor:focus{border-color:#9fe3c4;background:var(--card);box-shadow:0 0 0 4px rgba(8,166,106,.08)}
+.word-token{cursor:pointer;padding:1px 2px;border-radius:4px;transition:background .15s}
+.word-token:hover{background:var(--hover)}
+.err-word{border-bottom:2.5px wavy var(--red);background:rgba(239,68,68,.06)}
+.editor.color-coded .err-spell{border-bottom-color:var(--red);background:rgba(239,68,68,.08)}
+.editor.color-coded .err-grammar{border-bottom-color:var(--gblue);background:rgba(59,130,246,.08)}
+.editor.color-coded .err-style{border-bottom-color:var(--orange);background:rgba(245,158,11,.1)}
+.editor.color-coded .err-space{border-bottom-color:var(--purple);background:rgba(139,92,246,.08)}
 
-/* ---------- টুল-র‍্যাপ ---------- */
-.tool-wrap{position:relative;flex:1;display:flex;flex-direction:column;min-height:0}
+textarea{flex:1;width:100%;min-height:clamp(320px,54vh,560px);padding:22px;border:1px solid var(--line);border-radius:16px;
+  background:var(--input);font:16px/1.85 inherit;color:var(--ink);resize:vertical;outline:none;transition:.2s}
+textarea:focus{border-color:#9fe3c4;background:var(--card);box-shadow:0 0 0 4px rgba(8,166,106,.08)}
 
-textarea{flex:1;width:100%;min-height:clamp(320px,54vh,560px);padding:22px;
-  border:1px solid var(--line);border-radius:16px;background:#fbfdfc;
-  font:16px/1.85 inherit;color:inherit;resize:vertical;outline:none;transition:.2s}
-textarea:focus{border-color:#9fe3c4;background:#fff;
-  box-shadow:0 0 0 4px rgba(8,166,106,.08)}
-#p4 textarea{padding-bottom:66px}
-
-/* ---------- FAB ---------- */
-.fab{position:absolute;right:18px;bottom:18px;display:flex;align-items:center;
-  gap:8px;border:0;padding:12px 20px;border-radius:14px;cursor:pointer;
-  font:700 13.5px inherit;color:#fff;z-index:2;
-  background:linear-gradient(135deg,var(--green),var(--green2));
-  box-shadow:0 12px 26px rgba(8,166,106,.35);transition:.2s}
+.fab{position:absolute;right:18px;bottom:18px;display:flex;align-items:center;gap:8px;border:0;padding:12px 20px;
+  border-radius:14px;cursor:pointer;font:700 13.5px inherit;color:#fff;z-index:2;
+  background:linear-gradient(135deg,var(--green),var(--green2));box-shadow:0 12px 26px rgba(8,166,106,.35);transition:.2s}
 .fab:hover{filter:brightness(1.07);transform:translateY(-1px)}
-.fab svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.2;
-  stroke-linecap:round;stroke-linejoin:round}
+.fab.live{background:var(--red);animation:pulse 1.4s infinite}
+.fab svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+@keyframes pulse{50%{box-shadow:0 0 0 14px rgba(239,68,68,.15)}}
 
-/* ---------- মাইক ---------- */
-.micwrap{flex:1;min-height:clamp(260px,44vh,420px);display:grid;place-items:center;
-  gap:16px;padding:24px;border-radius:16px;border:1px dashed #cfe6dc;
-  background:linear-gradient(180deg,#f5fdf9,#fbfdfc)}
-.micbtn{width:76px;height:76px;border:0;border-radius:50%;cursor:pointer;display:grid;
-  place-items:center;background:linear-gradient(135deg,var(--green),var(--green2));
-  box-shadow:0 14px 30px rgba(8,166,106,.35);transition:.25s}
-.micbtn:hover{transform:scale(1.05)}
-.micbtn.live{animation:pulse 1.4s infinite}
-@keyframes pulse{50%{box-shadow:0 0 0 14px rgba(8,166,106,.12)}}
-.micbtn svg{width:29px;height:29px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
-.wave{display:flex;align-items:center;gap:5px;height:26px}
-.wave span{width:4px;height:8px;border-radius:3px;background:#0fc07d;
-  animation:wave 1s infinite ease-in-out}
-.wave span:nth-child(2){animation-delay:.15s}
-.wave span:nth-child(3){animation-delay:.3s}
-.wave span:nth-child(4){animation-delay:.45s}
-.wave span:nth-child(5){animation-delay:.6s}
-@keyframes wave{0%,100%{height:8px}50%{height:24px}}
+.wave{position:absolute;bottom:88px;right:36px;display:none;gap:4px;align-items:center;height:20px;z-index:3}
+.wave span{width:4px;height:8px;background:var(--red);border-radius:2px;animation:wv 1s infinite ease-in-out}
+.wave span:nth-child(2){animation-delay:.15s}.wave span:nth-child(3){animation-delay:.3s}
+.wave span:nth-child(4){animation-delay:.45s}.wave span:nth-child(5){animation-delay:.6s}
+@keyframes wv{0%,100%{height:8px}50%{height:20px}}
 
-/* ---------- OCR ---------- */
-.drop{flex:1;min-height:clamp(260px,44vh,420px);display:grid;place-items:center;
-  text-align:center;border:2px dashed #cfe6dc;border-radius:16px;background:#fbfdfc;
-  cursor:pointer;transition:.2s;padding:24px}
-.drop:hover{background:#f4fdf9;border-color:#9fe3c4}
-.drop svg{width:34px;height:34px;stroke:var(--green);fill:none;stroke-width:1.6;
-  stroke-linecap:round;stroke-linejoin:round;margin:0 auto}
-.drop p{margin-top:10px;font-size:13px;color:var(--muted)}
-.drop strong{color:var(--deep)}
-
-/* ---------- সেটিংস ড্রয়ার ---------- */
-.overlay{position:fixed;inset:0;background:rgba(10,40,30,.28);backdrop-filter:blur(2px);
-  opacity:0;visibility:hidden;transition:.25s;z-index:40}
+/* ---------- ড্রয়ার ---------- */
+.overlay{position:fixed;inset:0;background:rgba(10,40,30,.28);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:.25s;z-index:40}
 .overlay.on{opacity:1;visibility:visible}
-.drawer{position:fixed;top:0;right:0;height:100%;width:340px;max-width:88vw;z-index:50;
-  background:#fff;border-left:1px solid var(--line);padding:20px;overflow-y:auto;
-  transform:translateX(100%);transition:.32s cubic-bezier(.2,.8,.2,1);
-  box-shadow:-18px 0 40px rgba(10,60,40,.12)}
+.drawer{position:fixed;top:0;right:0;height:100%;width:360px;max-width:92vw;z-index:50;background:var(--card);
+  border-left:1px solid var(--line);padding:18px;overflow-y:auto;transform:translateX(100%);
+  transition:.32s cubic-bezier(.2,.8,.2,1);box-shadow:-18px 0 40px var(--shadow2)}
 .drawer.on{transform:translateX(0)}
-.dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .dhead h3{font-size:16px;font-weight:800;color:var(--deep)}
-.dclose{border:0;background:#f2f9f5;color:var(--deep);width:30px;height:30px;
-  border-radius:10px;font:700 15px inherit;cursor:pointer}
-.dclose:hover{background:var(--mint)}
+.dclose{border:0;background:var(--hover);color:var(--deep);width:30px;height:30px;border-radius:10px;font:700 15px inherit;cursor:pointer}
 
-.set-group{margin-bottom:18px}
-.set-group h4{font-size:11px;letter-spacing:.7px;text-transform:uppercase;
-  color:#9aa8ad;font-weight:700;margin-bottom:6px}
-.set-row{display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:8px 0;border-bottom:1px dashed #eef3f1;font-size:13.5px;font-weight:600}
-.set-row:last-child{border-bottom:0}
-input[type=checkbox]{accent-color:var(--green);width:17px;height:17px;cursor:pointer;flex:none}
-select{width:130px;border:1px solid var(--line);border-radius:9px;padding:7px 9px;
-  font:600 12.5px inherit;color:#17424a;background:#fff;outline:none}
-input[type=range]{accent-color:var(--green);width:120px}
+.reset-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.reset-btn{background:var(--hover);border:1px solid var(--line);padding:5px 11px;border-radius:7px;font:600 11.5px inherit;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.reset-btn:hover{background:rgba(239,68,68,.08);border-color:var(--red);color:var(--red)}
 
-@media(max-width:640px){
+.bs-tabs{display:flex;background:var(--hover);border-radius:10px;padding:4px;gap:4px;margin-bottom:12px}
+.bs-tab-btn{flex:1;padding:8px 10px;border:none;background:transparent;color:var(--muted);font:600 12.5px inherit;cursor:pointer;border-radius:7px;transition:.2s}
+.bs-tab-btn.on{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff}
+.bs-tab-content{display:none}
+.bs-tab-content.on{display:block}
+
+.set-item{padding:9px 0;border-bottom:1px dashed #eef3f1;font-size:13px}
+.set-item:last-child{border-bottom:none}
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:600}
+.set-info{flex:1;min-width:0}
+.set-title{font-size:13px;font-weight:600;color:var(--ink)}
+.set-desc{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.set-row select{width:130px;flex:none;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font:600 12px inherit;
+  color:var(--ink);background:var(--card);outline:none}
+.set-row select:focus{border-color:#9fe3c4;box-shadow:0 0 0 3px rgba(8,166,106,.1)}
+.set-row input[type="range"]{width:120px;accent-color:var(--green);flex:none}
+
+.sw{position:relative;display:inline-block;width:38px;height:21px;flex:none}
+.sw input{opacity:0;width:0;height:0}
+.sw .sld{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;transition:.25s;border-radius:22px}
+.sw .sld:before{content:"";position:absolute;height:15px;width:15px;left:3px;bottom:3px;background:#fff;transition:.25s;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw input:checked + .sld{background:linear-gradient(135deg,var(--green),var(--green2))}
+.sw input:checked + .sld:before{transform:translateX(17px)}
+
+.sub-box{margin-top:8px;padding:9px 11px;background:var(--hover);border-radius:8px;display:none}
+.sub-box.on{display:block}
+.range-head{display:flex;justify-content:space-between;font-size:11.5px;font-weight:600;margin-bottom:5px}
+.range-badge{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;padding:1px 7px;border-radius:9px;font-size:11px;font-weight:700}
+.sub-box input[type="range"]{width:100%;accent-color:var(--green)}
+
+.sec-label{font-size:10.5px;font-weight:700;color:var(--green);letter-spacing:.6px;text-transform:uppercase;
+  margin:12px 0 4px;padding-top:8px;border-top:1px dashed var(--line)}
+.sec-label:first-child{margin-top:0;padding-top:0;border-top:none}
+
+.dict-bar{display:flex;justify-content:space-between;align-items:center;background:rgba(8,166,106,.08);
+  padding:8px 11px;border-radius:8px;margin-bottom:9px;font-size:12.5px;color:var(--green);font-weight:600}
+.dict-item{display:flex;align-items:center;justify-content:space-between;padding:9px 11px;background:var(--card);
+  border:1px solid var(--line);border-radius:8px;margin-bottom:6px;font-size:12.5px}
+.dict-item:hover{border-color:#9fe3c4}
+.dict-meta{flex:1;min-width:0;padding-right:8px}
+.dict-name{font-weight:600;line-height:1.3}
+.dict-pub{font-size:10.5px;color:var(--muted);margin-top:2px}
+
+/* ---------- পপআপ ---------- */
+.bpop{position:fixed;z-index:2000;background:var(--card);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 10px 30px var(--shadow2);padding:12px;min-width:220px;max-width:290px;display:none;color:var(--ink);font-size:13px}
+.bpop.on{display:block;animation:bpin .15s ease}
+@keyframes bpin{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.bpop .ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.bpop .ptag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:rgba(239,68,68,.15);color:var(--red)}
+.bpop .chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
+.bpop .chip{background:rgba(8,166,106,.1);color:var(--green);border:1px solid rgba(8,166,106,.25);
+  padding:4px 10px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.bpop .chip:hover{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;border-color:transparent}
+.bpop .pdict{width:100%;padding:6px 10px;background:var(--hover);border:1px dashed var(--muted);border-radius:7px;
+  font:600 12.5px inherit;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
+.bpop .pdict:hover{background:rgba(8,166,106,.1);border-color:var(--green);color:var(--green)}
+.bpop .dt{font-size:15px;font-weight:700;color:var(--deep);margin-bottom:3px}
+.bpop .dp{display:inline-block;font-size:11px;background:var(--hover);color:var(--muted);padding:1px 7px;border-radius:4px;margin-bottom:6px;font-weight:600}
+.bpop .dm{font-size:13px;color:var(--ink)}
+
+.toast{position:fixed;bottom:22px;right:22px;background:#0f172a;color:#fff;padding:10px 18px;border-radius:9px;
+  font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:opacity .25s;z-index:3000}
+.toast.on{opacity:1}
+
+.footer{text-align:center;font-size:10.5px;color:var(--muted);padding:6px;line-height:1.5}
+
+@media(max-width:720px){
   .svc span{display:none}
   .svc{padding:12px 6px}
-  .panel{padding:16px;gap:12px}
   .brand h1{font-size:17px}
   .brand p{display:none}
-  .panel h2{font-size:15.5px}
-  .panel .sub{font-size:12px}
-  .icon-btn{width:32px;height:32px}
-  .icon-btn svg{width:14px;height:14px}
-  textarea{min-height:clamp(300px,50vh,500px);padding:16px;font-size:15px}
-  #p4 textarea{padding-bottom:62px}
-  .micwrap,.drop{min-height:clamp(240px,42vh,380px)}
-  .fab{padding:11px 16px;font-size:12.5px}
+  .panel-split{flex-direction:column}
+  .panel-split .sidebar{width:100%;max-height:220px}
+  .toolbar{gap:6px;padding:8px 10px}
+  .tg{padding-right:8px;gap:5px}
+  .qw .qt{display:none}
+  .top-links a{font-size:9px;padding:1px 4px}
+  .user-menu{right:-60px;width:240px}
+}
+@media(max-width:480px){
+  .switch button{padding:6px 10px;font-size:11px}
+  .ic{width:36px;height:36px}
+  .ic svg{width:17px;height:17px}
+  .avatar{width:36px;height:36px}
+  .editor,textarea{font-size:15px;padding:16px}
+  .fab{padding:10px 14px;font-size:12.5px}
+  .drawer{width:100vw;border-radius:0}
+  .bpop{max-width:92vw}
 }
 </style>
 </head>
 <body>
 
 <svg style="position:absolute;width:0;height:0" aria-hidden="true"><defs>
+  <!-- ব্রেইন আইকন -->
+  <symbol id="i-brain" viewBox="0 0 24 24">
+    <path d="M12 4a4 4 0 0 0-3.8 2.7A4 4 0 0 0 4 14.5a4.5 4.5 0 0 0 4 6.5 3 3 0 0 0 4-2.5 3 3 0 0 0 4 2.5 4.5 4.5 0 0 0 4-6.5 4 4 0 0 0-4.2-7.8A4 4 0 0 0 12 4z"/>
+    <path d="M12 8v12M9 11h6M9 15h6"/>
+  </symbol>
   <symbol id="i-spell" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
   <symbol id="i-grammar" viewBox="0 0 24 24"><path d="M4 6h16M4 12h11M4 18h7"/><circle cx="18" cy="17" r="2.5"/></symbol>
   <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
   <symbol id="i-speak" viewBox="0 0 24 24"><path d="M4 10v4h3l4 3V7l-4 3H4z"/><path d="M16 9a4 4 0 0 1 0 6M19 6.5a8 8 0 0 1 0 11"/></symbol>
   <symbol id="i-ocr" viewBox="0 0 24 24"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M4 12h16"/></symbol>
-  <symbol id="i-lotus" viewBox="0 0 24 24"><path d="M12 3c2 2.4 3 4.6 3 6.6 0 1.9-1.3 3.1-3 3.1s-3-1.2-3-3.1C9 7.6 10 5.4 12 3Z"/><path d="M4 12.5c2 3.2 4.8 4.8 8 4.8s6-1.6 8-4.8"/></symbol>
   <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
   <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol>
   <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 14V5m-4 4 4-4 4 4M5 16v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
 </defs></svg>
 
-<div class="app">
-
-  <header class="top">
-    <div class="brand">
-      <div class="logo"><svg><use href="#i-lotus"/></svg></div>
-      <div><h1>বোধ</h1><p>বাংলাকে বোঝে, নির্ভুলভাবে</p></div>
-    </div>
-    <span class="spacer"></span>
-    <div class="switch" id="enc">
-      <button class="on" data-enc="ইউনিকোড">ইউনিকোড</button>
-      <button data-enc="আনসি">আনসি</button>
-    </div>
-    <button class="gear" id="openSet" title="সেটিংস"><svg><use href="#i-gear"/></svg></button>
-  </header>
-
-  <nav class="services">
-    <button class="svc on" data-p="p1"><svg><use href="#i-spell"/></svg><span>বানান</span></button>
-    <button class="svc" data-p="p2"><svg><use href="#i-grammar"/></svg><span>ব্যাকরণ</span></button>
-    <button class="svc" data-p="p3"><svg><use href="#i-mic"/></svg><span>কথা → লেখা</span></button>
-    <button class="svc" data-p="p4"><svg><use href="#i-speak"/></svg><span>লেখা → কথা</span></button>
-    <button class="svc" data-p="p5"><svg><use href="#i-ocr"/></svg><span>ওসিআর</span></button>
-  </nav>
-
-  <!-- ১. বানান -->
-  <section class="panel on" id="p1">
-    <div class="panel-head">
-      <div class="titles">
-        <h2>বানান যাচাই</h2>
-        <p class="sub">বাংলা লেখার বানান স্বয়ংক্রিয়ভাবে যাচাই ও সংশোধন করুন</p>
-      </div>
-      <div class="file-tools">
-        <button class="icon-btn" data-action="upload" data-accept=".txt,.md,.text" title="আপলোড"><svg><use href="#i-upload"/></svg></button>
-        <button class="icon-btn" data-action="download" data-file="bodh-banan.txt" title="ডাউনলোড"><svg><use href="#i-download"/></svg></button>
-      </div>
-    </div>
-    <div class="tool-wrap">
-      <textarea placeholder="এখানে বাংলা লিখুন বা পেস্ট করুন অথবা আপলোড করুন..."></textarea>
-    </div>
-  </section>
-
-  <!-- ২. ব্যাকরণ -->
-  <section class="panel" id="p2">
-    <div class="panel-head">
-      <div class="titles">
-        <h2>ব্যাকরণ পরীক্ষা</h2>
-        <p class="sub">ব্যাকরণিক ভুল পরীক্ষা করুন</p>
-      </div>
-      <div class="file-tools">
-        <button class="icon-btn" data-action="upload" data-accept=".txt,.md,.text" title="আপলোড"><svg><use href="#i-upload"/></svg></button>
-        <button class="icon-btn" data-action="download" data-file="bodh-bakoron.txt" title="ডাউনলোড"><svg><use href="#i-download"/></svg></button>
-      </div>
-    </div>
-    <div class="tool-wrap">
-      <textarea placeholder="এখানে বাক্য লিখুন কপি করে এনে পেস্ট করুন অথবা আপলোড করুন..."></textarea>
-    </div>
-  </section>
-
-  <!-- ৩. কথা থেকে লেখা -->
-  <section class="panel" id="p3">
-    <div class="panel-head">
-      <div class="titles">
-        <h2>কথা থেকে লেখা</h2>
-        <p class="sub">কথা বলুন — আপনার কথা লেখায় রূপান্তর হবে।</p>
-      </div>
-      <div class="file-tools">
-        <button class="icon-btn" data-action="upload" data-accept="audio/*" title="অডিও আপলোড"><svg><use href="#i-upload"/></svg></button>
-        <button class="icon-btn" data-action="download" data-file="bodh-transcript.txt" title="লেখা ডাউনলোড"><svg><use href="#i-download"/></svg></button>
-      </div>
-    </div>
-    <div class="tool-wrap">
-      <div class="micwrap">
-        <button class="micbtn" id="mic"><svg><use href="#i-mic"/></svg></button>
-        <div class="wave"><span></span><span></span><span></span><span></span><span></span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ৪. লেখা থেকে কথা -->
-  <section class="panel" id="p4">
-    <div class="panel-head">
-      <div class="titles">
-        <h2>লেখা থেকে কথা</h2>
-        <p class="sub">যে-কোনো বাংলা লেখা স্বাভাবিক কণ্ঠে শুনুন।</p>
-      </div>
-      <div class="file-tools">
-        <button class="icon-btn" data-action="upload" data-accept=".txt,.md,.text" title="আপলোড"><svg><use href="#i-upload"/></svg></button>
-        <button class="icon-btn" data-action="download" data-file="bodh-text.txt" title="ডাউনলোড"><svg><use href="#i-download"/></svg></button>
-      </div>
-    </div>
-    <div class="tool-wrap">
-      <textarea placeholder="যে লেখাটি শুনতে চান তা লিখুন..."></textarea>
-      <button class="fab"><svg><use href="#i-play"/></svg> শুনুন</button>
-    </div>
-  </section>
-
-  <!-- ৫. ওসিআর -->
-  <section class="panel" id="p5">
-    <div class="panel-head">
-      <div class="titles">
-        <h2>ওসিআর — ছবি থেকে লেখা</h2>
-        <p class="sub">ছবি বা স্ক্যান করা পৃষ্ঠা থেকে বাংলা লেখা বের করুন</p>
-      </div>
-      <div class="file-tools">
-        <button class="icon-btn" data-action="upload" data-accept="image/*,.pdf" title="আপলোড"><svg><use href="#i-upload"/></svg></button>
-        <button class="icon-btn" data-action="download" data-file="bodh-ocr.txt" title="ডাউনলোড"><svg><use href="#i-download"/></svg></button>
-      </div>
-    </div>
-    <div class="tool-wrap">
-      <label class="drop">
-        <div>
-          <svg><use href="#i-ocr"/></svg>
-          <p><strong>ছবি টেনে ছাড়ুন</strong> অথবা ক্লিক করে বেছে নিন</p>
-          <p>JPG, PNG, PDF — সর্বোচ্চ ১০ এমবি</p>
-        </div>
-        <input type="file" hidden accept="image/*,.pdf">
-      </label>
-      <button class="fab">লেখা বের করুন</button>
-    </div>
-  </section>
-
+<!-- লগইন স্ক্রিন -->
+<div id="authScreen">
+  <div class="login-box">
+    <div class="logo"><svg><use href="#i-brain"/></svg></div>
+    <h2 data-bn="বোধ-এ স্বাগতম" data-en="Welcome to Bodh">বোধ-এ স্বাগতম</h2>
+    <p data-bn="বাংলাকে বোঝে, নির্ভুলভাবে" data-en="Understands Bengali, accurately">বাংলাকে বোঝে, নির্ভুলভাবে</p>
+    <input type="text" id="loginEmail" placeholder="ইমেইল বা ফোন নম্বর" data-bn-placeholder="ইমেইল বা ফোন নম্বর" data-en-placeholder="Email or phone">
+    <input type="password" id="loginPass" placeholder="পাসওয়ার্ড" data-bn-placeholder="পাসওয়ার্ড" data-en-placeholder="Password">
+    <button onclick="performLogin()" data-bn="প্রবেশ করুন" data-en="Enter">প্রবেশ করুন</button>
+  </div>
 </div>
 
-<!-- ---------- সেটিংস ---------- -->
-<div class="overlay" id="overlay"></div>
+<div class="app" id="mainApp" style="display:none">
+
+  <header class="top">
+    <div class="top-links">
+      <a href="https://www.revegroup.com" target="_blank" rel="noopener" data-bn="প্রাইভেসি" data-en="Privacy">প্রাইভেসি</a>
+      <a href="https://www.revegroup.com" target="_blank" rel="noopener" data-bn="জিজ্ঞাসা" data-en="FAQ">জিজ্ঞাসা</a>
+      <a href="https://www.revegroup.com" target="_blank" rel="noopener" data-bn="ইউজার ম্যানুয়াল" data-en="User Manual">ইউজার ম্যানুয়াল</a>
+      <a href="https://www.revegroup.com" target="_blank" rel="noopener" data-bn="আমাদের সম্পর্কে" data-en="About Us">আমাদের সম্পর্কে</a>
+    </div>
+
+    <div class="brand">
+      <div class="logo"><svg><use href="#i-brain"/></svg></div>
+      <div><h1>বোধ</h1><p data-bn="বাংলাকে বোঝে, নির্ভুলভাবে" data-en="Understands Bengali, accurately">বাংলাকে বোঝে, নির্ভুলভাবে</p></div>
+    </div>
+    <span class="spacer"></span>
+
+    <div class="switch" id="langToggle">
+      <button class="on" data-lang="bn">BN</button>
+      <button data-lang="en">EN</button>
+    </div>
+
+    <button class="ic" onclick="toggleTheme()" title="Theme">
+      <svg id="themeIcon"><use href="#i-moon"/></svg>
+    </button>
+
+    <div class="share-wrap">
+      <button class="ic" onclick="toggleShareMenu(event)" title="Share"><svg><use href="#i-share"/></svg></button>
+      <div class="share-menu" id="shareMenu">
+        <a href="mailto:?subject=Bodh">Email</a>
+        <a href="#">Facebook</a>
+        <a href="#">Twitter</a>
+        <div onclick="copyLink()" data-bn="লিঙ্ক কপি" data-en="Copy link">লিঙ্ক কপি</div>
+      </div>
+    </div>
+
+    <div class="user-wrap">
+      <div class="avatar" onclick="toggleUserMenu(event)">P</div>
+      <div class="user-menu" id="userMenu">
+        <div class="um-head">
+          <div class="um-av">P</div>
+          <div>
+            <div class="um-name" data-bn="পরীক্ষা ব্যবহারকারী" data-en="Test User">পরীক্ষা ব্যবহারকারী</div>
+            <div class="um-email">user@bodh.app</div>
+          </div>
+        </div>
+        <div class="um-stats">
+          <div class="um-row"><span data-bn="সদস্য" data-en="Member">সদস্য</span><span data-bn="জানু ২০২৪" data-en="Jan 2024">জানু ২০২৪</span></div>
+          <div class="um-row"><span data-bn="মোট সংশোধন" data-en="Total fixes">মোট সংশোধন</span><span data-bn="২৪৫" data-en="245">২৪৫</span></div>
+          <div class="um-row"><span data-bn="ভাষা" data-en="Language">ভাষা</span><span data-bn="বাংলা" data-en="Bengali">বাংলা</span></div>
+          <div class="um-row"><span data-bn="প্রিয় অভিধান" data-en="Favorite dict">প্রিয় অভিধান</span><span data-bn="বাংলা একাডেমি" data-en="Bangla Academy">বাংলা একাডেমি</span></div>
+        </div>
+        <button class="um-logout" onclick="performLogout()" data-bn="লগআউট" data-en="Logout">লগআউট</button>
+      </div>
+    </div>
+
+    <button class="ic" id="openSet" onclick="toggleDrawer(true)" title="Settings"><svg><use href="#i-gear"/></svg></button>
+  </header>
+
+  <!-- নেভিগেশন (বানান ও ব্যাকরণ মার্জ করা হয়েছে) -->
+  <nav class="services" id="serviceNav">
+    <button class="svc on" data-p="p1"><svg><use href="#i-spell"/></svg><span data-bn="বানান ও ব্যাকরণ" data-en="Spelling & Grammar">বানান ও ব্যাকরণ</span></button>
+    <button class="svc" data-p="p3"><svg><use href="#i-mic"/></svg><span data-bn="কথা → লেখা" data-en="Speech → Text">কথা → লেখা</span></button>
+    <button class="svc" data-p="p4"><svg><use href="#i-speak"/></svg><span data-bn="লেখা → কথা" data-en="Text → Speech">লেখা → কথা</span></button>
+    <button class="svc" data-p="p5"><svg><use href="#i-ocr"/></svg><span data-bn="ওসিআর" data-en="OCR">ওসিআর</span></button>
+  </nav>
+
+  <!-- টুলবার -->
+  <div class="toolbar" id="toolbar">
+    <div class="tg">
+      <span class="lbl" data-bn="সাধু-চলিত:" data-en="Sadhu-Cholito:">সাধু-চলিত:</span>
+      <label class="toggle"><input type="checkbox" checked id="ribbonSadhu"><span class="sld"></span></label>
+    </div>
+    <div class="tg">
+      <div class="mode-group">
+        <button class="mode-btn on" data-mode="spell" onclick="setCheckMode('spell')" data-bn="বানান" data-en="Spelling">বানান</button>
+        <button class="mode-btn" data-mode="grammar" onclick="setCheckMode('grammar')" data-bn="ব্যাকরণ" data-en="Grammar">ব্যাকরণ</button>
+      </div>
+    </div>
+    <div class="tg">
+      <div class="mode-group">
+        <button class="mode-btn" data-enc="ascii" onclick="setEncodingMode('ascii')" data-bn="আসকি" data-en="ASCII">আসকি</button>
+        <button class="mode-btn on" data-enc="unicode" onclick="setEncodingMode('unicode')" data-bn="ইউনিকোড" data-en="Unicode">ইউনিকোড</button>
+      </div>
+    </div>
+    <div class="tg badges">
+      <span class="badge badge-red"><span class="dot dot-red"></span><span data-bn="বানান" data-en="Spelling">বানান</span>&nbsp;<span id="spellCount">০</span></span>
+      <span class="badge badge-blue"><span class="dot dot-blue"></span><span data-bn="ব্যাকরণ" data-en="Grammar">ব্যাকরণ</span>&nbsp;<span id="gramCount">০</span></span>
+    </div>
+    <div class="tg">
+      <button class="btn-outline" onclick="showPersonalDictPopup(this)" id="personalDictBtn">
+        <svg><use href="#i-book"/></svg>
+        <span data-bn="শব্দকোষ" data-en="Dictionary">শব্দকোষ</span>
+        <span class="count-chip" id="personalDictCount">০</span>
+      </button>
+    </div>
+    <div class="tb-right">
+      <div class="qw">
+        <div class="qc"><span class="qn" id="qualityNum">১০০</span></div>
+        <div class="qt">
+          <div class="qt1" data-bn="লেখার মান" data-en="Quality">লেখার মান</div>
+          <div class="qt2" id="qualitySub" data-bn="চমৎকার" data-en="Excellent">চমৎকার</div>
+        </div>
+      </div>
+      <button class="icon-btn" style="width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;transition:.2s" onclick="ribbonAction('download')" title="Download"><svg style="width:16px;height:16px;stroke:var(--green);fill:none;stroke-width:2"><use href="#i-download"/></svg></button>
+      <button class="icon-btn" style="width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;transition:.2s" onclick="ribbonAction('upload')" title="Upload"><svg style="width:16px;height:16px;stroke:var(--green);fill:none;stroke-width:2"><use href="#i-upload"/></svg></button>
+    </div>
+  </div>
+
+  <!-- P1 বানান ও ব্যাকরণ -->
+  <section class="panel on" id="p1">
+    <div class="panel-split">
+      <aside class="sidebar">
+        <h3 data-bn="সাজেশন" data-en="Suggestions">সাজেশন</h3>
+        <div class="sidebar-cards" data-cards="p1"></div>
+      </aside>
+      <div class="editor-wrap">
+        <div class="editor color-coded" id="editor-p1" contenteditable="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- P3 কথা → লেখা -->
+  <section class="panel" id="p3">
+    <div class="editor-wrap">
+      <div class="editor color-coded" id="p3-text" contenteditable="true" data-bn-placeholder="কথা বলুন — ফলাফল এখানে আসবে।" data-en-placeholder="Speak — result appears here." data-placeholder="কথা বলুন — ফলাফল এখানে আসবে।"></div>
+      <div class="wave" id="micWave"><span></span><span></span><span></span><span></span><span></span></div>
+      <button class="fab" id="micP3" onclick="toggleMicP3(this)">
+        <svg><use href="#i-mic"/></svg>
+        <span class="mlbl" data-bn="বলুন" data-en="Speak">বলুন</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- P4 লেখা → কথা -->
+  <section class="panel" id="p4">
+    <div class="editor-wrap">
+      <textarea id="ttsText" data-bn-placeholder="যে লেখাটি শুনতে চান তা লিখুন..." data-en-placeholder="Type the text you want to hear..." placeholder="যে লেখাটি শুনতে চান তা লিখুন...">বাংলা আমাদের মাতৃভাষা। প্রত্যেক বছর একুশে ফেব্রুয়ারি আমরা ভাষা শহিদের গভীর শ্রদ্ধার সাথে স্মরণ করি। এই দিনটি এখন আন্তর্জাতিক মাতৃভাষা দিবস হিসেবে সারা বিশ্বব্যাপী পালিত হয়।</textarea>
+      <button class="fab" onclick="toggleSpeak(document.getElementById('ttsText').value,this)">
+        <svg><use href="#i-play"/></svg>
+        <span class="llbl" data-bn="শুনুন" data-en="Listen">শুনুন</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- P5 ওসিআর -->
+  <section class="panel" id="p5">
+    <div class="editor-wrap">
+      <div class="editor" id="p5-output" contenteditable="true" data-bn-placeholder="ছবি আপলোড করুন — লেখা এখানে আসবে।" data-en-placeholder="Upload an image — text appears here." data-placeholder="ছবি আপলোড করুন — লেখা এখানে আসবে।"></div>
+      <label class="fab" style="cursor:pointer">
+        <svg><use href="#i-upload"/></svg>
+        <span data-bn="ছবি আপলোড" data-en="Upload">ছবি আপলোড</span>
+        <input type="file" hidden accept="image/*,.pdf" onchange="bsToast(currentLang==='bn'?'ছবি আপলোড হয়েছে!':'Image uploaded!')">
+      </label>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span data-bn="© ২০২৪ বোধ। সর্বস্বত্ব সংরক্ষিত। | দাবিত্যাগ: এই সেবাটি কোনো প্রকার ওয়ারেন্টি ছাড়াই 'যেমন আছে তেমন' ভিত্তিতে প্রদান করা হয়েছে।" data-en="© 2024 Bodh. All rights reserved. | Disclaimer: This service is provided 'as is' without any warranty.">© ২০২৪ বোধ। সর্বস্বত্ব সংরক্ষিত। | দাবিত্যাগ: এই সেবাটি কোনো প্রকার ওয়ারেন্টি ছাড়াই 'যেমন আছে তেমন' ভিত্তিতে প্রদান করা হয়েছে।</span>
+  </footer>
+</div>
+
+<!-- সেটিংস ড্রয়ার -->
+<div class="overlay" id="overlay" onclick="toggleDrawer(false)"></div>
 <aside class="drawer" id="drawer">
   <div class="dhead">
-    <h3>সেটিংস</h3>
-    <button class="dclose" id="closeSet">✕</button>
+    <h3 data-bn="সেটিংস" data-en="Settings">সেটিংস</h3>
+    <button class="dclose" onclick="toggleDrawer(false)">✕</button>
   </div>
 
-  <div class="set-group">
-    <h4>সাধারণ</h4>
-    <div class="set-row">ইন্টারফেসের ভাষা
-      <select><option>বাংলা</option><option>English</option></select></div>
+  <!-- P1 সেটিংস (বানান ও ব্যাকরণ) -->
+  <div class="set-group" data-svc="p1" style="display:block">
+    <div class="reset-bar">
+      <span style="font-size:11px;color:var(--muted)" data-bn="সব ডিফল্টে ফিরিয়ে নিন" data-en="Restore all defaults">সব ডিফল্টে ফিরিয়ে নিন</span>
+      <button class="reset-btn" onclick="bsResetDemo()" data-bn="রিসেট" data-en="Reset">রিসেট</button>
+    </div>
+    <div class="bs-tabs">
+      <button class="bs-tab-btn on" onclick="bsSwitchTab('banan')" data-bn="বানান" data-en="Spelling">বানান</button>
+      <button class="bs-tab-btn" onclick="bsSwitchTab('bakoron')" data-bn="ব্যাকরণ" data-en="Grammar">ব্যাকরণ</button>
+      <button class="bs-tab-btn" onclick="bsSwitchTab('abhidhan')" data-bn="অভিধান" data-en="Dictionary">অভিধান</button>
+    </div>
+
+    <div id="bs-tab-banan" class="bs-tab-content on">
+      <div class="set-item">
+        <div class="set-row">
+          <div class="set-info"><div class="set-title" data-bn="একাধিক সাজেশন" data-en="Multiple Suggestions">একাধিক সাজেশন</div>
+            <div class="set-desc" data-bn="ভুল শব্দের জন্য একাধিক বিকল্প" data-en="Show multiple alternatives">ভুল শব্দের জন্য একাধিক বিকল্প</div></div>
+          <label class="sw"><input type="checkbox" class="bs-sync-multi" checked onchange="bsSyncCommon('multiSug',this.checked)"><span class="sld"></span></label>
+        </div>
+        <div class="sub-box on bs-sug-box">
+          <div class="range-head"><span data-bn="সাজেশনের সংখ্যা" data-en="Suggestion count">সাজেশনের সংখ্যা</span><span class="range-badge bs-sug-val">৫টি</span></div>
+          <input type="range" class="bs-sug-range" min="1" max="10" value="5" oninput="bsSyncSuggestionCount(this.value)">
+        </div>
+      </div>
+      <div class="set-item"><div class="set-row">
+        <div class="set-info"><div class="set-title" data-bn="ব্যক্তিগত শব্দকোষ" data-en="Personal Dictionary">ব্যক্তিগত শব্দকোষ</div>
+          <div class="set-desc" data-bn="সাজেশন কার্ডে যোগ করার আইকন" data-en="Show add icon in suggestion cards">সাজেশন কার্ডে যোগ করার আইকন</div></div>
+        <label class="sw"><input type="checkbox" class="bs-sync-pdict" checked onchange="bsSyncCommon('personalDict',this.checked)"><span class="sld"></span></label>
+      </div></div>
+      <div class="set-item"><div class="set-row">
+        <div class="set-info"><div class="set-title" data-bn="শব্দের বিস্তারিত" data-en="Word Details">শব্দের বিস্তারিত</div>
+          <div class="set-desc" data-bn="ক্লিক করে অর্থ ও পদ দেখুন" data-en="Click word for meaning & POS">ক্লিক করে অর্থ ও পদ দেখুন</div></div>
+        <label class="sw"><input type="checkbox" class="bs-sync-details" checked onchange="bsSyncCommon('wordDetails',this.checked)"><span class="sld"></span></label>
+      </div></div>
+    </div>
+
+    <div id="bs-tab-bakoron" class="bs-tab-content">
+      <div class="set-item"><div class="set-row">
+        <div class="set-info"><div class="set-title" data-bn="একাধিক সাজেশন" data-en="Multiple Suggestions">একাধিক সাজেশন</div></div>
+        <label class="sw"><input type="checkbox" class="bs-sync-multi" checked onchange="bsSyncCommon('multiSug',this.checked)"><span class="sld"></span></label>
+      </div>
+        <div class="sub-box on bs-sug-box">
+          <div class="range-head"><span data-bn="সাজেশনের সংখ্যা" data-en="Suggestion count">সাজেশনের সংখ্যা</span><span class="range-badge bs-sug-val">৫টি</span></div>
+          <input type="range" class="bs-sug-range" min="1" max="10" value="5" oninput="bsSyncSuggestionCount(this.value)">
+        </div>
+      </div>
+      <div class="set-item"><div class="set-row">
+        <div class="set-info"><div class="set-title" data-bn="ব্যক্তিগত শব্দকোষ" data-en="Personal Dictionary">ব্যক্তিগত শব্দকোষ</div></div>
+        <label class="sw"><input type="checkbox" class="bs-sync-pdict" checked onchange="bsSyncCommon('personalDict',this.checked)"><span class="sld"></span></label>
+      </div></div>
+      <div class="set-item"><div class="set-row">
+        <div class="set-info"><div class="set-title" data-bn="শব্দের বিস্তারিত" data-en="Word Details">শব্দের বিস্তারিত</div></div>
+        <label class="sw"><input type="checkbox" class="bs-sync-details" checked onchange="bsSyncCommon('wordDetails',this.checked)"><span class="sld"></span></label>
+      </div></div>
+      <div class="sec-label" data-bn="নিয়ম" data-en="Rules">নিয়ম</div>
+      <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="কর্তা-ক্রিয়ার সম্পর্ক" data-en="Subject-Verb Agreement">কর্তা-ক্রিয়ার সম্পর্ক</div></div><label class="sw"><input type="checkbox" checked onchange="bsToggleRule('korta-kriya',this.checked)"><span class="sld"></span></label></div></div>
+      <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="যতিচিহ্ন" data-en="Punctuation">যতিচিহ্ন</div></div><label class="sw"><input type="checkbox" checked onchange="bsToggleRule('jotichinho',this.checked)"><span class="sld"></span></label></div></div>
+      <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="বানান সঠিক নয়" data-en="Incorrect Spelling">বানান সঠিক নয়</div></div><label class="sw"><input type="checkbox" checked onchange="bsToggleRule('banan-vul',this.checked)"><span class="sld"></span></label></div></div>
+      <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="বিবিধ" data-en="Miscellaneous">বিবিধ</div></div><label class="sw"><input type="checkbox" checked onchange="bsToggleRule('bibidho',this.checked)"><span class="sld"></span></label></div></div>
+      <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="প্রত্যয়-বিভক্তি" data-en="Suffix & Inflection">প্রত্যয়-বিভক্তি</div></div><label class="sw"><input type="checkbox" checked onchange="bsToggleRule('prottoy-bivokti',this.checked)"><span class="sld"></span></label></div></div>
+      <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="ফাঁকা হবে" data-en="Missing Space">ফাঁকা হবে</div></div><label class="sw"><input type="checkbox" checked onchange="bsToggleRule('faka-hobe',this.checked)"><span class="sld"></span></label></div></div>
+      <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="অতিরিক্ত ফাঁকা" data-en="Extra Space">অতিরিক্ত ফাঁকা</div></div><label class="sw"><input type="checkbox" checked onchange="bsToggleRule('otirikto-faka',this.checked)"><span class="sld"></span></label></div></div>
+      <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="যথার্থ শব্দ বসেনি" data-en="Wrong Word">যথার্থ শব্দ বসেনি</div></div><label class="sw"><input type="checkbox" checked onchange="bsToggleRule('jothartho-shobdo',this.checked)"><span class="sld"></span></label></div></div>
+      <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="অব্যয়" data-en="Particle">অব্যয়</div></div><label class="sw"><input type="checkbox" checked onchange="bsToggleRule('obboy',this.checked)"><span class="sld"></span></label></div></div>
+      <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="বাহুল্য" data-en="Redundancy">বাহুল্য</div></div><label class="sw"><input type="checkbox" checked onchange="bsToggleRule('bahullo',this.checked)"><span class="sld"></span></label></div></div>
+      <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="কনটেক্সট ভুল" data-en="Context Error">কনটেক্সট ভুল</div></div><label class="sw"><input type="checkbox" checked onchange="bsToggleRule('context-vul',this.checked)"><span class="sld"></span></label></div></div>
+      <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="রঙ অনুযায়ী আলাদা" data-en="Color by Category">রঙ অনুযায়ী আলাদা</div></div><label class="sw"><input type="checkbox" checked onchange="bsToggleColorCoding(this.checked)"><span class="sld"></span></label></div></div>
+      <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="উদ্ধৃতি উপেক্ষা" data-en="Ignore quotes">উদ্ধৃতি উপেক্ষা</div></div><label class="sw"><input type="checkbox" onchange="bsToggleIgnoreQuotes(this.checked)"><span class="sld"></span></label></div></div>
+    </div>
+
+    <div id="bs-tab-abhidhan" class="bs-tab-content">
+      <div class="dict-bar"><span data-bn="সক্রিয় অভিধান" data-en="Active dictionaries">সক্রিয় অভিধান</span><span id="bs-active-dict-count">৮ / ১২</span></div>
+      <div id="bs-dictionary-list"></div>
+    </div>
   </div>
 
-  <div class="set-group" data-svc="p1">
-    <h4>বানান</h4>
-    <div class="set-row"><span>স্বয়ংক্রিয় সংশোধন</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>শব্দ প্রস্তাবনা</span><input type="checkbox"></div>
-    <div class="set-row"><span>নিজের অভিধান</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>যুক্তবর্ণ যাচাই</span><input type="checkbox"></div>
+  <!-- P3 কথা→লেখা -->
+  <div class="set-group" data-svc="p3" style="display:none">
+    <div class="reset-bar"><span style="font-size:11px;color:var(--muted)" data-bn="ডিফল্টে ফিরুন" data-en="Restore defaults">ডিফল্টে ফিরুন</span>
+      <button class="reset-btn" onclick="resetServiceSettings('p3')" data-bn="রিসেট" data-en="Reset">রিসেট</button></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="ভাষা" data-en="Language">ভাষা</div></div>
+      <select><option data-bn="বাংলা" data-en="Bengali" selected>বাংলা</option><option data-bn="ইংরেজি" data-en="English">ইংরেজি</option></select></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="বানান সংশোধন" data-en="Correct spelling">বানান সংশোধন</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="অটো-কপি" data-en="Auto-copy">অটো-কপি</div></div>
+      <label class="sw"><input type="checkbox"><span class="sld"></span></label></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="স্বয়ংক্রিয় থামা" data-en="Auto-stop">স্বয়ংক্রিয় থামা</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="যতিচিহ্ন যোগ" data-en="Add punctuation">যতিচিহ্ন যোগ</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="ভাষার ধরন" data-en="Language type">ভাষার ধরন</div></div>
+      <select><option data-bn="প্রমিত" data-en="Standard" selected>প্রমিত</option><option data-bn="আঞ্চলিক" data-en="Regional">আঞ্চলিক</option></select></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="ইন্টারিম রেজাল্ট" data-en="Interim results">ইন্টারিম রেজাল্ট</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
   </div>
 
-  <div class="set-group" data-svc="p2">
-    <h4>ব্যাকরণ — ত্রুটির ধরন</h4>
-    <div class="set-row"><span>কর্তা-ক্রিয়ার সম্পর্ক</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>সাধু-চলিত মিশ্রণ</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>যতিচিহ্ন</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>বানান সঠিক নয়</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>বিবিধ</span><input type="checkbox"></div>
-    <div class="set-row"><span>প্রত্যয়-বিভক্তি</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>ফাঁকা হবে</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>অতিরিক্ত ফাঁকা</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>যথার্থ শব্দ বসেনি</span><input type="checkbox"></div>
-    <div class="set-row"><span>অব্যয়</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>বাহুল্য</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>কনটেক্সট ভুল</span><input type="checkbox" checked></div>
+  <!-- P4 লেখা→কথা -->
+  <div class="set-group" data-svc="p4" style="display:none">
+    <div class="reset-bar"><span style="font-size:11px;color:var(--muted)" data-bn="ডিফল্টে ফিরুন" data-en="Restore defaults">ডিফল্টে ফিরুন</span>
+      <button class="reset-btn" onclick="resetServiceSettings('p4')" data-bn="রিসেট" data-en="Reset">রিসেট</button></div>
+    <div class="sec-label" data-bn="ভয়েস" data-en="Voice">ভয়েস</div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="ভাষা" data-en="Language">ভাষা</div></div>
+      <select><option data-bn="বাংলা" data-en="Bengali" selected>বাংলা</option><option data-bn="ইংরেজি" data-en="English">ইংরেজি</option></select></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="কণ্ঠ" data-en="Voice">কণ্ঠ</div></div>
+      <select><option data-bn="নারী" data-en="Female" selected>নারী</option><option data-bn="পুরুষ" data-en="Male">পুরুষ</option></select></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="কোড মিক্সিং" data-en="Code mixing">কোড মিক্সিং</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
+    <div class="sec-label" data-bn="গতি" data-en="Speed">গতি</div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="কথার গতি" data-en="Speech speed">কথার গতি</div></div>
+      <input type="range" min="0.5" max="2" step="0.1" value="1"></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="পিচ" data-en="Pitch">পিচ</div></div>
+      <input type="range" min="0.5" max="2" step="0.1" value="1"></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="ভলিউম" data-en="Volume">ভলিউম</div></div>
+      <input type="range" min="0" max="1" step="0.05" value="1"></div></div>
+    <div class="sec-label" data-bn="প্রদর্শন" data-en="Display">প্রদর্শন</div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="লাইভ শব্দ হাইলাইট" data-en="Live word highlight">লাইভ শব্দ হাইলাইট</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="অটো-স্ক্রল" data-en="Auto-scroll">অটো-স্ক্রল</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="রিপিট" data-en="Repeat">রিপিট</div></div>
+      <select><option value="0" data-bn="না" data-en="No" selected>না</option><option value="1" data-bn="১ বার" data-en="Once">১ বার</option><option value="2" data-bn="২ বার" data-en="Twice">২ বার</option><option value="3" data-bn="৩ বার" data-en="Thrice">৩ বার</option></select></div></div>
+    <div class="sec-label" data-bn="অডিও" data-en="Audio">অডিও</div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="ফরম্যাট" data-en="Format">ফরম্যাট</div></div>
+      <select><option selected>MP3</option><option>WAV</option><option>OGG</option></select></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="কোয়ালিটি" data-en="Quality">কোয়ালিটি</div></div>
+      <select><option data-bn="নিম্ন" data-en="Low">নিম্ন</option><option data-bn="মাঝারি" data-en="Medium" selected>মাঝারি</option><option data-bn="উচ্চ" data-en="High">উচ্চ</option></select></div></div>
   </div>
 
-  <div class="set-group" data-svc="p3">
-    <h4>কথা → লেখা</h4>
-    <div class="set-row">ভাষা
-      <select><option>বাংলা</option><option>ইংরেজি</option><option>মিশ্র</option></select></div>
-    <div class="set-row"><span>লাইভ প্রতিলিপি</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>অটো বিরাম</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>সময়-স্ট্যাম্প</span><input type="checkbox"></div>
-  </div>
-
-  <div class="set-group" data-svc="p4">
-    <h4>লেখা → কথা</h4>
-    <div class="set-row">কণ্ঠ
-      <select><option>নারী</option><option>পুরুষ</option></select></div>
-    <div class="set-row"><span>গতি</span><input type="range" min="0.5" max="2" step="0.1" value="1"></div>
-    <div class="set-row"><span>লম্বা লেখা</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>অডিও ডাউনলোড</span><input type="checkbox"></div>
-  </div>
-
-  <div class="set-group" data-svc="p5">
-    <h4>ওসিআর</h4>
-    <div class="set-row"><span>হাতে লেখা</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>টেবিল শনাক্ত</span><input type="checkbox" checked></div>
-    <div class="set-row"><span>একাধিক পৃষ্ঠা</span><input type="checkbox"></div>
+  <!-- P5 ওসিআর -->
+  <div class="set-group" data-svc="p5" style="display:none">
+    <div class="reset-bar"><span style="font-size:11px;color:var(--muted)" data-bn="ডিফল্টে ফিরুন" data-en="Restore defaults">ডিফল্টে ফিরুন</span>
+      <button class="reset-btn" onclick="resetServiceSettings('p5')" data-bn="রিসেট" data-en="Reset">রিসেট</button></div>
+    <div class="sec-label" data-bn="সাধারণ" data-en="General">সাধারণ</div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="ভাষা" data-en="Language">ভাষা</div></div>
+      <select><option data-bn="বাংলা" data-en="Bengali" selected>বাংলা</option><option data-bn="ইংরেজি" data-en="English">ইংরেজি</option></select></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="বানান সংশোধন" data-en="Correct spelling">বানান সংশোধন</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="যুক্তাক্ষর ফিক্স" data-en="Fix conjuncts">যুক্তাক্ষর ফিক্স</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="হাতের লেখা মোড" data-en="Handwriting mode">হাতের লেখা মোড</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
+    <div class="sec-label" data-bn="ইমেজ" data-en="Image">ইমেজ</div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="দাগ ও ঝাপসা কমানো" data-en="Reduce noise & blur">দাগ ও ঝাপসা কমানো</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="ছবি সোজা করা" data-en="Straighten image">ছবি সোজা করা</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="টেবিল সংরক্ষণ" data-en="Preserve tables">টেবিল সংরক্ষণ</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
+    <div class="sec-label" data-bn="আউটপুট" data-en="Output">আউটপুট</div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="লাইন ব্রেক জোড়া" data-en="Join line breaks">লাইন ব্রেক জোড়া</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="হেডার/ফুটার বাদ" data-en="Remove headers">হেডার/ফুটার বাদ</div></div>
+      <label class="sw"><input type="checkbox" checked><span class="sld"></span></label></div></div>
+    <div class="set-item"><div class="set-row"><div class="set-info"><div class="set-title" data-bn="ডাউনলোড ফরম্যাট" data-en="Download format">ডাউনলোড ফরম্যাট</div></div>
+      <select><option selected>TXT</option><option>DOCX</option><option>PDF</option></select></div></div>
   </div>
 </aside>
 
+<!-- পপআপ -->
+<div id="bs-suggestion-popup" class="bpop">
+  <div class="ph"><span id="bs-popup-type" class="ptag">ত্রুটি</span><span style="cursor:pointer;color:var(--muted)" onclick="bsClosePopups()">✕</span></div>
+  <div id="bs-popup-sugs" class="chips"></div>
+  <button id="bs-popup-dict-btn" class="pdict" onclick="bsAddToPersonalDict()" data-bn="＋ শব্দকোষে যোগ করুন" data-en="＋ Add to Dictionary">＋ শব্দকোষে যোগ করুন</button>
+</div>
+<div id="bs-details-popup" class="bpop">
+  <div class="ph"><span style="font-size:11.5px;font-weight:700;color:var(--muted)" data-bn="শব্দের বিস্তারিত" data-en="Word Details">শব্দের বিস্তারিত</span><span style="cursor:pointer;color:var(--muted)" onclick="bsClosePopups()">✕</span></div>
+  <div id="bs-details-word" class="dt">শব্দ</div>
+  <div id="bs-details-pos" class="dp" data-bn="বিশেষ্য" data-en="Noun">বিশেষ্য</div>
+  <div id="bs-details-meaning" class="dm" data-bn="অর্থ এখানে।" data-en="Meaning here.">অর্থ এখানে।</div>
+</div>
+<div id="personal-dict-popup" class="bpop" style="min-width:260px;max-width:320px">
+  <div class="ph">
+    <span style="font-size:13px;font-weight:700" data-bn="ব্যক্তিগত শব্দকোষ" data-en="Personal Dictionary">ব্যক্তিগত শব্দকোষ</span>
+    <span style="cursor:pointer;color:var(--muted)" onclick="bsClosePopups()">✕</span>
+  </div>
+  <div id="personal-dict-list" style="max-height:280px;overflow-y:auto"></div>
+</div>
+<div id="bs-toast" class="toast"></div>
+
 <script>
-  var svcs = document.querySelectorAll('.svc');
+/* ============ ভাষা ============ */
+let currentLang = 'bn';
+const t = (bn,en)=> currentLang==='bn'?bn:en;
 
-  function syncSettings() {
-    var active = document.querySelector('.svc.on').dataset.p;
-    document.querySelectorAll('.set-group[data-svc]').forEach(function (g) {
-      g.style.display = (g.dataset.svc === active) ? '' : 'none';
+function setLang(lang){
+  currentLang = lang;
+  document.querySelectorAll('#langToggle button').forEach(b=>b.classList.toggle('on', b.dataset.lang===lang));
+  document.querySelectorAll('[data-bn]').forEach(el=>{
+    const v = lang==='bn'?el.dataset.bn:el.dataset.en;
+    if(v!==undefined) el.textContent = v;
+  });
+  document.querySelectorAll('[data-bn-placeholder]').forEach(el=>{
+    const v = lang==='bn'?el.dataset.bnPlaceholder:el.dataset.enPlaceholder;
+    if(v===undefined) return;
+    if(el.tagName==='TEXTAREA' || el.tagName==='INPUT') el.placeholder = v;
+    else el.setAttribute('data-placeholder', v);
+  });
+  bsRenderEditor(); bsRenderSidebarCards(); bsRenderDictionaries();
+  bsSyncSuggestionCount(bsState.suggestionCount); updatePersonalDictCount();
+}
+document.querySelectorAll('#langToggle button').forEach(b=>{
+  b.addEventListener('click', ()=> setLang(b.dataset.lang));
+});
+
+/* ============ লগইন ============ */
+function performLogin(){
+  const e = document.getElementById('loginEmail').value.trim();
+  if(!e){ alert(t('ইমেইল বা ফোন নম্বর দিন','Enter email or phone')); return; }
+  try{ localStorage.setItem('bodh_loggedin','1'); }catch(_){}
+  document.getElementById('authScreen').style.display='none';
+  document.getElementById('mainApp').style.display='flex';
+}
+function performLogout(){
+  try{ localStorage.removeItem('bodh_loggedin'); }catch(_){}
+  document.getElementById('authScreen').style.display='flex';
+  document.getElementById('mainApp').style.display='none';
+  document.getElementById('userMenu').classList.remove('on');
+}
+function checkLoginState(){
+  try{
+    if(localStorage.getItem('bodh_loggedin')==='1'){
+      document.getElementById('authScreen').style.display='none';
+      document.getElementById('mainApp').style.display='flex';
+    }
+  }catch(_){}
+}
+
+/* ============ থিম/শেয়ার/ইউজার/ড্রয়ার ============ */
+function toggleTheme(){
+  const dark = document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme', dark?'light':'dark');
+  document.getElementById('themeIcon').setAttribute('href', dark?'#i-moon':'#i-sun');
+}
+function toggleShareMenu(e){ e.stopPropagation();
+  document.getElementById('shareMenu').classList.toggle('on');
+  document.getElementById('userMenu').classList.remove('on');
+}
+function copyLink(){ navigator.clipboard.writeText('https://bodh.app');
+  bsToast(t('লিঙ্ক কপি হয়েছে','Link copied'));
+  document.getElementById('shareMenu').classList.remove('on');
+}
+function toggleUserMenu(e){ e.stopPropagation();
+  document.getElementById('userMenu').classList.toggle('on');
+  document.getElementById('shareMenu').classList.remove('on');
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.share-wrap')) document.getElementById('shareMenu').classList.remove('on');
+  if(!e.target.closest('.user-wrap')) document.getElementById('userMenu').classList.remove('on');
+});
+function toggleDrawer(open){
+  document.getElementById('drawer').classList.toggle('on', open);
+  document.getElementById('overlay').classList.toggle('on', open);
+}
+
+/* ============ সার্ভিস নেভিগেশন ============ */
+document.querySelectorAll('.svc').forEach(s=>{
+  s.addEventListener('click', ()=>{
+    document.querySelectorAll('.svc').forEach(x=>x.classList.remove('on'));
+    s.classList.add('on');
+    const p = s.dataset.p;
+    document.querySelectorAll('.panel').forEach(v=>v.classList.toggle('on', v.id===p));
+    document.getElementById('toolbar').classList.add('on');
+    document.querySelectorAll('.set-group[data-svc]').forEach(g=>{
+      g.style.display = g.dataset.svc===p ? 'block' : 'none';
     });
-  }
-
-  svcs.forEach(function (s) {
-    s.onclick = function () {
-      svcs.forEach(function (x) { x.classList.remove('on'); });
-      document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('on'); });
-      s.classList.add('on');
-      document.getElementById(s.dataset.p).classList.add('on');
-      syncSettings();
-    };
   });
+});
 
-  var enc = document.querySelectorAll('#enc button');
-  enc.forEach(function (b) {
-    b.onclick = function () {
-      enc.forEach(function (x) { x.classList.remove('on'); });
-      b.classList.add('on');
-    };
-  });
-
-  var drawer = document.getElementById('drawer');
-  var overlay = document.getElementById('overlay');
-  function toggleSet(open) {
-    drawer.classList.toggle('on', open);
-    overlay.classList.toggle('on', open);
-  }
-  document.getElementById('openSet').onclick = function () { toggleSet(true); };
-  document.getElementById('closeSet').onclick = function () { toggleSet(false); };
-  overlay.onclick = function () { toggleSet(false); };
-
-  document.getElementById('mic').onclick = function () {
-    this.classList.toggle('live');
-  };
-
-  document.querySelectorAll('[data-action="upload"]').forEach(function (btn) {
-    btn.onclick = function () {
-      var panel = btn.closest('.panel');
-      var area = panel ? panel.querySelector('textarea') : null;
-      var input = document.createElement('input');
-      input.type = 'file';
-      input.accept = btn.dataset.accept || '.txt,.md';
-      input.onchange = function () {
-        var file = input.files[0];
-        if (!file) return;
-        if (area) {
-          var reader = new FileReader();
-          reader.onload = function () { area.value = reader.result; };
-          reader.readAsText(file);
+/* ============ টুলবার ============ */
+function setCheckMode(mode){
+  bsState.checkMode = mode;
+  document.querySelectorAll('.mode-btn[data-mode]').forEach(b=>b.classList.toggle('on', b.dataset.mode===mode));
+  bsRenderSidebarCards();
+}
+function setEncodingMode(enc){
+  bsState.encodingMode = enc;
+  document.querySelectorAll('.mode-btn[data-enc]').forEach(b=>b.classList.toggle('on', b.dataset.enc===enc));
+  bsToast(t('এনকোডিং: '+enc.toUpperCase(), 'Encoding: '+enc.toUpperCase()));
+}
+function ribbonAction(action, service){
+  const svc = service || (document.querySelector('.svc.on')?.dataset.p) || 'p1';
+  if(action==='download'){
+    let text = '';
+    if(svc==='p1') text = (document.getElementById('editor-p1').innerText || '');
+    else if(svc==='p3') text = document.getElementById('p3-text').innerText || '';
+    else if(svc==='p4') text = document.getElementById('ttsText').value || '';
+    else if(svc==='p5') text = document.getElementById('p5-output').innerText || '';
+    const blob = new Blob([text||'বোধ — ফলাফল'],{type:'text/plain;charset=utf-8'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = 'bodh-'+svc+'.txt'; document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(a.href);
+    bsToast(t('ডাউনলোড শুরু হয়েছে','Download started'));
+  } else if(action==='upload'){
+    const inp = document.createElement('input'); inp.type='file';
+    inp.accept = svc==='p5' ? 'image/*,.pdf'
+               : svc==='p3' ? 'audio/*'
+               : 'text/plain,application/pdf,.doc,.docx';
+    inp.onchange = ()=>{
+      if(inp.files[0]){
+        bsToast(t(`ফাইল "${inp.files[0].name}" আপলোড হয়েছে`, `File "${inp.files[0].name}" uploaded`));
+        if(inp.files[0].type.startsWith('text/') || inp.files[0].name.match(/\.(txt|md)$/i)){
+          const rd = new FileReader();
+          rd.onload = ()=>{
+            if(svc==='p4') document.getElementById('ttsText').value = rd.result;
+            else if(svc==='p3') document.getElementById('p3-text').innerText = rd.result;
+            else if(svc==='p5') document.getElementById('p5-output').innerText = rd.result;
+            else document.getElementById('editor-p1').innerText = rd.result;
+          };
+          rd.readAsText(inp.files[0]);
         }
+      }
+    };
+    inp.click();
+  }
+}
+
+/* ============ সেটিংস রিসেট ============ */
+function resetServiceSettings(svc){
+  const group = document.querySelector(`.set-group[data-svc="${svc}"]`);
+  if(!group) return;
+  group.querySelectorAll('input[type="checkbox"]').forEach(cb=> cb.checked = cb.defaultChecked);
+  group.querySelectorAll('select').forEach(s=>{
+    for(let i=0;i<s.options.length;i++) s.options[i].selected = s.options[i].defaultSelected;
+  });
+  group.querySelectorAll('input[type="range"]').forEach(r=>{
+    const dv = r.getAttribute('value'); if(dv!==null) r.value = dv;
+  });
+  bsToast(t('সেটিংস রিসেট হয়েছে','Settings reset'));
+}
+
+/* ============ ডেটা ============ */
+const defaultDictionaries = [
+  {id:'ba_adhunik',name:'বাংলা একাডেমি আধুনিক বাংলা অভিধান',pub:'বাংলা একাডেমি, ঢাকা',active:true},
+  {id:'ba_byaboharik',name:'ব্যবহারিক বাংলা অভিধান',pub:'বাংলা একাডেমি, ঢাকা',active:true},
+  {id:'ba_promito',name:'প্রমিত বাংলা বানানের নিয়ম শব্দকোষ',pub:'বাংলা একাডেমি, ঢাকা',active:true},
+  {id:'samsad',name:'সংসদ বাঙ্গালা অভিধান',pub:'সাহিত্য সংসদ, কলকাতা',active:true},
+  {id:'cholontika',name:'চলন্তিকা',pub:'রাজশেখর বসু',active:false},
+  {id:'jnanendra',name:'বাঙ্গালা ভাষার অভিধান',pub:'জ্ঞানেন্দ্রমোহন দাস',active:false},
+  {id:'bongiyo',name:'বঙ্গীয় শব্দকোষ',pub:'হরিচরণ বন্দ্যোপাধ্যায়',active:false},
+  {id:'ancholik',name:'আঞ্চলিক ভাষার অভিধান',pub:'ড. মুহম্মদ শহীদুল্লাহ',active:false},
+  {id:'biggan',name:'বিজ্ঞান ও প্রযুক্তি পরিভাষা',pub:'ICT Division',active:true},
+  {id:'chikitsa',name:'চিকিৎসা পরিভাষা অভিধান',pub:'জাতীয় পরিভাষা কমিটি',active:true},
+  {id:'ain',name:'আইন ও দাপ্তরিক পরিভাষা',pub:'আইন মন্ত্রণালয়',active:true},
+  {id:'nam',name:'স্থান ও ব্যক্তিনাম শব্দকোষ',pub:'প্রমিত নাম ডেটাবেজ',active:true}
+];
+
+const bsState = {
+  multiSug:true, suggestionCount:5, personalDictIcon:true, wordDetails:true,
+  colorCoding:true, ignoreQuotes:false,
+  checkMode:'spell', encodingMode:'unicode',
+  rules:{
+    'korta-kriya':true,'jotichinho':true,'banan-vul':true,'bibidho':true,
+    'prottoy-bivokti':true,'faka-hobe':true,'otirikto-faka':true,
+    'jothartho-shobdo':true,'obboy':true,'bahullo':true,'context-vul':true
+  },
+  dictionaries: JSON.parse(JSON.stringify(defaultDictionaries)),
+  personalWords: [], activeWordIndex:null
+};
+
+const bsInitialTokens = [
+  {text:'তিনি',pos:'সর্বনাম',meaning:'সম্মানার্থে তৃতীয় পুরুষের সর্বনাম।'},
+  {text:'প্রতিদিন',pos:'ক্রিয়াবিশেষণ',meaning:'রোজ, প্রত্যহ।'},
+  {text:'সকালে',pos:'বিশেষ্য',meaning:'ভোরবেলায়, প্রভাতে।'},
+  {text:'বাড়ী',rule:'banan-vul',category:'err-spell',label:'বানান সঠিক নয়',labelEn:'Incorrect Spelling',
+    suggestions:['বাড়ি','বাড়িতে','গৃহ','আবাস','ভবন','নিবাস','বাসা','ঘর'],pos:'বিশেষ্য',meaning:'বসতঘর (প্রমিত বানানে ই-কার)।'},
+  {text:'থেকে',pos:'অনুসর্গ',meaning:'হইতে, আরম্ভের সূচক।'},
+  {text:'বেরিয়ে',pos:'ক্রিয়াপদ',meaning:'বাইরে এসে বা প্রস্থান করে।'},
+  {text:'অফিসে',pos:'বিশেষ্য',meaning:'দপ্তর বা কার্যালয়ে।'},
+  {text:'যায়',rule:'korta-kriya',category:'err-grammar',label:'কর্তা-ক্রিয়ার সম্পর্ক',labelEn:'Subject-Verb Agreement',
+    suggestions:['যান','গেলেন','যাচ্ছেন','যাবেন'],pos:'ক্রিয়াপদ',meaning:'সম্মানসূচক "তিনি"-এর সাথে "যান" প্রযোজ্য।'},
+  {text:'এবং',pos:'অব্যয়',meaning:'সংযোজক অব্যয়, ও, আর।'},
+  {text:'কাজ',pos:'বিশেষ্য',meaning:'কর্ম বা শ্রম।'},
+  {text:'করিতেছেন',rule:'sadhu-cholit',category:'err-style',label:'সাধু-চলিত মিশ্রণ',labelEn:'Sadhu-Cholito Mix',
+    suggestions:['করছেন','করেছেন','কর্মরত আছেন'],pos:'ক্রিয়াপদ',meaning:'প্রমিত চলিত রূপ "করছেন" প্রযোজ্য।'},
+  {text:'।',pos:'যতিচিহ্ন',meaning:'দাঁড়ি।'}
+];
+
+/* ============ এডিটর রেন্ডার ============ */
+function bsRenderEditor(){
+  document.querySelectorAll('.editor.color-coded').forEach(editor=>{
+    if(editor.id==='p5-output') return;
+    let html = '';
+    bsInitialTokens.forEach((tok,idx)=>{
+      let cls = 'word-token';
+      if(tok.rule){
+        if(!bsState.rules[tok.rule]){ cls+=''; }
+        else cls += ' ' + (tok.category || 'err-word');
+      }
+      html += `<span class="${cls}" data-tok="${idx}">${tok.text}</span>`;
+    });
+    editor.innerHTML = html;
+    editor.querySelectorAll('.word-token').forEach(el=>{
+      el.addEventListener('click', ev=>{ bsShowTokenPopup(el, ev); });
+    });
+  });
+  bsCountErrors();
+}
+
+function bsCountErrors(){
+  let sp=0, gr=0;
+  bsInitialTokens.forEach(tok=>{
+    if(!tok.rule || !bsState.rules[tok.rule]) return;
+    if(tok.category==='err-spell') sp++;
+    else gr++;
+  });
+  document.getElementById('spellCount').textContent = sp.toLocaleString('bn-BD');
+  document.getElementById('gramCount').textContent = gr.toLocaleString('bn-BD');
+  const total = bsInitialTokens.length;
+  const errors = sp+gr;
+  const q = Math.max(0, Math.round(100 - (errors/total)*100));
+  document.getElementById('qualityNum').textContent = q.toLocaleString('bn-BD');
+  document.getElementById('qualitySub').textContent = q>=90?t('চমৎকার','Excellent'):q>=70?t('ভালো','Good'):t('উন্নতির প্রয়োজন','Needs work');
+}
+
+function bsRenderSidebarCards(){
+  const mode = bsState.checkMode;
+  document.querySelectorAll('.sidebar-cards').forEach(container=>{
+    const filter = mode; 
+    const errs = bsInitialTokens.map((tok,i)=>({...tok,i})).filter(tok=>{
+      if(!tok.rule || !bsState.rules[tok.rule]) return false;
+      if(filter==='spell') return tok.category==='err-spell';
+      return tok.category!=='err-spell';
+    });
+    if(!errs.length){
+      container.innerHTML = `<div style="font-size:12px;color:var(--muted);text-align:center;padding:14px 0">${t('কোনো ত্রুটি নেই','No errors')}</div>`;
+      return;
+    }
+    let html = '';
+    errs.forEach(tok=>{
+      const sugCount = bsState.multiSug ? bsState.suggestionCount : 1;
+      const sugs = (tok.suggestions||[]).slice(0, sugCount);
+      const typeCls = tok.category==='err-spell'?'':(tok.category==='err-grammar'?'blue':'orange');
+      const lab = currentLang==='bn' ? (tok.label||'ত্রুটি') : (tok.labelEn||tok.label||'Error');
+      html += `<div class="sug-card" data-tok="${tok.i}">
+        <div class="sug-type ${typeCls}">${lab}</div>`;
+      sugs.forEach(s=>{
+        html += `<div class="sug-row"><span class="sug-wrong">${tok.text}</span><span class="sug-arrow">→</span><span class="sug-correct" data-fix="${s}" data-i="${tok.i}">${s}</span></div>`;
+      });
+      html += `</div>`;
+    });
+    container.innerHTML = html;
+    container.querySelectorAll('.sug-correct').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        const i = +el.dataset.i, fix = el.dataset.fix;
+        bsInitialTokens[i].text = fix;
+        bsInitialTokens[i].rule = null;
+        bsInitialTokens[i].category = null;
+        bsRenderEditor(); bsRenderSidebarCards();
+        bsToast(t('সংশোধন প্রয়োগ হয়েছে','Correction applied'));
+      });
+    });
+  });
+}
+
+function bsShowTokenPopup(el, ev){
+  const i = +el.dataset.tok;
+  const tok = bsInitialTokens[i];
+  bsState.activeWordIndex = i;
+  bsClosePopups();
+  if(tok.rule && bsState.rules[tok.rule]){
+    const pop = document.getElementById('bs-suggestion-popup');
+    const chips = document.getElementById('bs-popup-sugs');
+    const tag = document.getElementById('bs-popup-type');
+    tag.textContent = currentLang==='bn'?(tok.label||'ত্রুটি'):(tok.labelEn||'Error');
+    tag.style.background = tok.category==='err-spell'?'rgba(239,68,68,.15)':
+                           tok.category==='err-grammar'?'rgba(59,130,246,.15)':'rgba(245,158,11,.15)';
+    tag.style.color = tok.category==='err-spell'?'var(--red)':
+                      tok.category==='err-grammar'?'var(--gblue)':'var(--orange)';
+    chips.innerHTML = '';
+    const sugCount = bsState.multiSug ? bsState.suggestionCount : 1;
+    (tok.suggestions||[]).slice(0, sugCount).forEach(s=>{
+      const b = document.createElement('button');
+      b.className = 'chip'; b.textContent = s;
+      b.onclick = ()=>{
+        bsInitialTokens[i].text = s;
+        bsInitialTokens[i].rule = null;
+        bsInitialTokens[i].category = null;
+        bsClosePopups(); bsRenderEditor(); bsRenderSidebarCards();
+        bsToast(t('সংশোধন প্রয়োগ হয়েছে','Correction applied'));
       };
-      input.click();
-    };
-  });
+      chips.appendChild(b);
+    });
+    document.getElementById('bs-popup-dict-btn').style.display = bsState.personalDictIcon?'flex':'none';
+    bsShowPopupAt(pop, ev);
+  } else if(bsState.wordDetails && tok.meaning){
+    const pop = document.getElementById('bs-details-popup');
+    document.getElementById('bs-details-word').textContent = tok.text;
+    document.getElementById('bs-details-pos').textContent = tok.pos||'';
+    document.getElementById('bs-details-meaning').textContent = tok.meaning;
+    bsShowPopupAt(pop, ev);
+  }
+}
+function bsShowPopupAt(pop, ev){
+  pop.classList.add('on');
+  const x = Math.min(window.innerWidth-320, ev.clientX||200);
+  const y = Math.min(window.innerHeight-220, (ev.clientY||200)+10);
+  pop.style.left = Math.max(10,x)+'px';
+  pop.style.top = Math.max(10,y)+'px';
+}
+function bsClosePopups(){
+  document.querySelectorAll('.bpop').forEach(p=>p.classList.remove('on'));
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.bpop') && !e.target.closest('.word-token') && !e.target.closest('.sug-correct')){
+    // 
+  }
+});
 
-  document.querySelectorAll('[data-action="download"]').forEach(function (btn) {
-    btn.onclick = function () {
-      var panel = btn.closest('.panel');
-      var area = panel ? panel.querySelector('textarea') : null;
-      var text = area ? area.value : 'বোধ — ফলাফল এখানে দেখা যাবে।';
-      var name = btn.dataset.file || 'bodh-result.txt';
-      var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = name;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(a.href);
-    };
-  });
+function bsAddToPersonalDict(){
+  const i = bsState.activeWordIndex;
+  if(i===null) return;
+  const tok = bsInitialTokens[i];
+  if(tok && !bsState.personalWords.includes(tok.text)){
+    bsState.personalWords.push(tok.text);
+    updatePersonalDictCount();
+    bsToast(t('শব্দকোষে যোগ হয়েছে: '+tok.text, 'Added to dictionary: '+tok.text));
+  }
+  bsClosePopups();
+}
+function updatePersonalDictCount(){
+  document.getElementById('personalDictCount').textContent = bsState.personalWords.length.toLocaleString('bn-BD');
+}
+function showPersonalDictPopup(btn){
+  const pop = document.getElementById('personal-dict-popup');
+  const list = document.getElementById('personal-dict-list');
+  if(!bsState.personalWords.length){
+    list.innerHTML = `<div style="font-size:12px;color:var(--muted);padding:8px 0;text-align:center">${t('এখনো কোনো শব্দ যোগ করা হয়নি','No words added yet')}</div>`;
+  } else {
+    list.innerHTML = bsState.personalWords.map(w=>`<div class="dict-item"><span class="dict-name">${w}</span><span style="color:var(--red);cursor:pointer" onclick="bsRemoveWord('${w.replace(/'/g,"\\'")}')">✕</span></div>`).join('');
+  }
+  pop.classList.add('on');
+  const rect = btn.getBoundingClientRect();
+  pop.style.left = Math.max(10, Math.min(window.innerWidth-340, rect.left-40))+'px';
+  pop.style.top = (rect.bottom+8)+'px';
+}
+function bsRemoveWord(w){
+  bsState.personalWords = bsState.personalWords.filter(x=>x!==w);
+  updatePersonalDictCount();
+  showPersonalDictPopup(document.getElementById('personalDictBtn'));
+}
 
-  syncSettings();
+/* ============ সেটিংস sync ============ */
+function bsSyncCommon(key, val){
+  if(key==='multiSug') bsState.multiSug = val;
+  else if(key==='personalDict') bsState.personalDictIcon = val;
+  else if(key==='wordDetails') bsState.wordDetails = val;
+  document.querySelectorAll('.bs-sync-'+ (key==='multiSug'?'multi':key==='personalDict'?'pdict':'details')).forEach(el=>el.checked = val);
+  const sugBox = document.querySelector('.bs-sug-box');
+  if(sugBox) sugBox.classList.toggle('on', bsState.multiSug);
+  bsRenderSidebarCards();
+}
+function bsSyncSuggestionCount(v){
+  bsState.suggestionCount = +v;
+  document.querySelectorAll('.bs-sug-val').forEach(el=> el.textContent = (+v).toLocaleString('bn-BD')+'টি');
+  document.querySelectorAll('.bs-sug-range').forEach(el=> el.value = v);
+  bsRenderSidebarCards();
+}
+function bsToggleRule(rule, val){
+  bsState.rules[rule] = val;
+  bsRenderEditor(); bsRenderSidebarCards();
+}
+function bsToggleColorCoding(val){
+  bsState.colorCoding = val;
+  document.querySelectorAll('.editor.color-coded').forEach(el=>el.classList.toggle('color-coded', val));
+}
+function bsToggleIgnoreQuotes(val){ bsState.ignoreQuotes = val; }
+
+/* ============ সেটিংস ট্যাব ============ */
+function bsSwitchTab(name){
+  document.querySelectorAll('.bs-tab-btn').forEach(b=>b.classList.remove('on'));
+  event.target.classList.add('on');
+  document.querySelectorAll('.bs-tab-content').forEach(c=>c.classList.remove('on'));
+  document.getElementById('bs-tab-'+name).classList.add('on');
+}
+
+/* ============ অভিধান ============ */
+function bsRenderDictionaries(){
+  const list = document.getElementById('bs-dictionary-list');
+  if(!list) return;
+  list.innerHTML = bsState.dictionaries.map(d=>`
+    <div class="dict-item">
+      <div class="dict-meta"><div class="dict-name">${d.name}</div><div class="dict-pub">${d.pub}</div></div>
+      <label class="sw"><input type="checkbox" ${d.active?'checked':''} onchange="bsToggleDict('${d.id}',this.checked)"><span class="sld"></span></label>
+    </div>`).join('');
+  bsUpdateActiveDictCount();
+}
+function bsToggleDict(id, val){
+  const d = bsState.dictionaries.find(x=>x.id===id);
+  if(d) d.active = val;
+  bsUpdateActiveDictCount();
+}
+function bsUpdateActiveDictCount(){
+  const active = bsState.dictionaries.filter(d=>d.active).length;
+  const el = document.getElementById('bs-active-dict-count');
+  if(el) el.textContent = active.toLocaleString('bn-BD')+' / '+bsState.dictionaries.length;
+}
+
+/* ============ রিসেট সব ============ */
+function bsResetDemo(){
+  bsState.multiSug = true; bsState.suggestionCount = 5; bsState.personalDictIcon = true;
+  bsState.wordDetails = true; bsState.colorCoding = true; bsState.ignoreQuotes = false;
+  Object.keys(bsState.rules).forEach(k=> bsState.rules[k] = true);
+  document.querySelectorAll('.bs-sync-multi').forEach(el=>el.checked = true);
+  document.querySelectorAll('.bs-sync-pdict').forEach(el=>el.checked = true);
+  document.querySelectorAll('.bs-sync-details').forEach(el=>el.checked = true);
+  document.querySelectorAll('.bs-sug-range').forEach(el=>el.value = 5);
+  bsSyncSuggestionCount(5);
+  document.querySelectorAll('.bs-sug-box').forEach(el=>el.classList.add('on'));
+  bsRenderEditor(); bsRenderSidebarCards();
+  bsToast(t('সব সেটিংস ডিফল্টে ফিরেছে','All settings restored to defaults'));
+}
+
+/* ============ মাইক P3 ============ */
+function toggleMicP3(btn){
+  btn.classList.toggle('live');
+  const isLive = btn.classList.contains('live');
+  const lbl = btn.querySelector('.mlbl');
+  if(lbl) lbl.textContent = isLive ? t('থামুন','Stop') : t('বলুন','Speak');
+  document.getElementById('micWave').style.display = isLive ? 'flex' : 'none';
+}
+
+/* ============ TTS P4 ============ */
+let speaking = false;
+function toggleSpeak(text, btn){
+  if(!text || !text.trim()){ bsToast(t('আগে কিছু লিখুন','Type something first')); return; }
+  if('speechSynthesis' in window){
+    if(speaking){ window.speechSynthesis.cancel(); speaking=false;
+      if(btn) btn.querySelector('.llbl').textContent = t('শুনুন','Listen');
+      return;
+    }
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'bn-BD';
+    u.onend = ()=>{ speaking=false; if(btn) btn.querySelector('.llbl').textContent = t('শুনুন','Listen'); };
+    speaking = true;
+    if(btn) btn.querySelector('.llbl').textContent = t('থামুন','Stop');
+    window.speechSynthesis.speak(u);
+  } else {
+    bsToast(t('ব্রাউজার সাপোর্ট করছে না','Browser does not support TTS'));
+  }
+}
+
+/* ============ টোস্ট ============ */
+let toastT;
+function bsToast(msg){
+  const el = document.getElementById('bs-toast');
+  el.textContent = msg;
+  el.classList.add('on');
+  clearTimeout(toastT);
+  toastT = setTimeout(()=> el.classList.remove('on'), 2400);
+}
+
+/* ============ আরম্ভ ============ */
+document.addEventListener('DOMContentLoaded', ()=>{
+  checkLoginState();
+  bsRenderEditor();
+  bsRenderSidebarCards();
+  bsRenderDictionaries();
+  updatePersonalDictCount();
+  document.getElementById('toolbar').classList.add('on');
+});
 </script>
 </body>
 </html>
